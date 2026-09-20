@@ -1,0 +1,20 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+
+.footer {
+    @apply fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 dark:text-gray-200 py-1 px-2 max-sm:px-0 shadow-lg z-30;
+    direction: ltr;
+    border-top: 1px solid #303030;
+
+    & .footer-content {
+        @apply mx-auto sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between;
+    }
+
+    & .footer-copyright {
+        @apply mt-2 md:mt-0 text-gray-900 dark:text-gray-400;
+    }
+}
+
