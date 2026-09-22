@@ -27,12 +27,14 @@ class Page extends Model
         'meta_keywords',
         'meta_description',
         'sections',
+        'order',
     ];
 
     protected function casts(): array
     {
         return [
             'is_visible' => 'boolean',
+            'order' => 'integer',
             'show_in_main_nav' => 'boolean',
             'show_in_top_nav' => 'boolean',
             'is_cta' => 'boolean',

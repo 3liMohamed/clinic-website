@@ -27,6 +27,7 @@ class Feature extends Model
     {
         return [
             'is_visible' => 'boolean',
+            'order' => 'integer',
         ];
     }
 

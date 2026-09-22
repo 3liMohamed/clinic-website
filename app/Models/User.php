@@ -116,6 +116,14 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
                 'restore' => true,
                 'force_delete' => true,
             ],
+            'statistics' => [
+                'view' => true,
+                'create' => true,
+                'edit' => true,
+                'delete' => true,
+                'restore' => true,
+                'force_delete' => true,
+            ],
         ];
     }
 }

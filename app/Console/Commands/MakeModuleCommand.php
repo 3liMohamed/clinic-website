@@ -73,6 +73,7 @@ class MakeModuleCommand extends Command
                         {
                             return [
                                 'is_visible' => 'boolean',
+                                'order' => 'integer',
                             ];
                         }
 

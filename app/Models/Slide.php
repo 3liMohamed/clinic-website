@@ -32,6 +32,7 @@ class Slide extends Model
     {
         return [
             'is_visible' => 'boolean',
+            'order' => 'integer',
         ];
     }
 

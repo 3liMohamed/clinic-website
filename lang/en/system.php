@@ -98,6 +98,7 @@ return [
         'icon_helper' => 'icon_helper',
         'link_text' => 'link_text',
         'link_url' => 'link_url',
+        'count' => 'count',
     ],
     'user' => [
         'model' => 'User',
@@ -139,5 +140,13 @@ return [
     'slide' => [
         'model' => 'Slide',
         'navigation' => 'Slides',
+    ],
+    'feature' => [
+        'model' => 'Feature',
+        'navigation' => 'Features',
+    ],
+    'statistic' => [
+        'model' => 'Statistic',
+        'navigation' => 'Statistics',
     ],
 ];

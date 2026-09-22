@@ -54,6 +54,10 @@ class IconSelect extends Select
     protected function clinicRelevantKeywords(): array
     {
         return [
+            'smile',
+            'simple',
+            'table',
+            'home',
             'ambulance',
             'hospital',
             'clinic',

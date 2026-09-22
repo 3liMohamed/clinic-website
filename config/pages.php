@@ -8,6 +8,7 @@ return [
             'slider' => 'sections.sliders',
             'clinic infos' => 'sections.clinic-infos',
             'features' => 'sections.features',
+            'statistics' => 'sections.statistics',
         ],
     ],
 

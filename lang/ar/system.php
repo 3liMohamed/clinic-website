@@ -98,6 +98,7 @@ return [
         'icon_helper' => 'icon_helper',
         'link_text' => 'link_text',
         'link_url' => 'link_url',
+        'count' => 'count',
     ],
     'user' => [
         'model' => 'مستخدم',
@@ -137,6 +138,14 @@ return [
         'updated' => 'updated',
     ],
     'slide' => [
+        'model' => 'model',
+        'navigation' => 'navigation',
+    ],
+    'feature' => [
+        'model' => 'model',
+        'navigation' => 'navigation',
+    ],
+    'statistic' => [
         'model' => 'model',
         'navigation' => 'navigation',
     ],

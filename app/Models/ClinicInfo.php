@@ -30,6 +30,7 @@ class ClinicInfo extends Model
     {
         return [
             'is_visible' => 'boolean',
+            'order' => 'integer',
         ];
     }
 
