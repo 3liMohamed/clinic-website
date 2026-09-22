@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Setting;
+use App\Rules\ValidOrHash;
 use App\Services\SettingService;
 use BackedEnum;
 use Filament\Enums\ThemeMode;
@@ -156,14 +157,14 @@ class Settings extends Page
 
                         TextInput::make('contact:phone')
                             ->required()
-                            ->tel()
                             ->prefix('+20')
+                            ->rule('regex:/^(#|(\+20)?1[0125][0-9]{8})$/')
                             ->columnSpan(4)
                             ->label(__('system.field.phone')),
 
                         TextInput::make('contact:email')
                             ->required()
-                            ->email()
+                            ->rule('regex:/^(#|.+@.+\..+)$/')
                             ->columnSpan(4)
                             ->label(__('system.field.email')),
 
@@ -175,25 +176,25 @@ class Settings extends Page
 
                         TextInput::make('social:facebook')
                             ->required()
-                            ->url()
+                            ->rule(ValidOrHash::urlOrHash())
                             ->columnSpan(3)
                             ->label(__('system.field.facebook')),
 
                         TextInput::make('social:instagram')
                             ->required()
-                            ->url()
+                            ->rule(ValidOrHash::urlOrHash())
                             ->columnSpan(3)
                             ->label(__('system.field.instagram')),
 
                         TextInput::make('social:twitter')
                             ->required()
-                            ->url()
+                            ->rule(ValidOrHash::urlOrHash())
                             ->columnSpan(3)
                             ->label(__('system.field.twitter')),
 
                         TextInput::make('social:youtube')
                             ->required()
-                            ->url()
+                            ->rule(ValidOrHash::urlOrHash())
                             ->columnSpan(3)
                             ->label(__('system.field.youtube')),
                     ])

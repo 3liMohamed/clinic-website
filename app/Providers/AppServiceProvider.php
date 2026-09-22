@@ -17,6 +17,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(Services\WebsiteGalleryService::class);
         $this->app->singleton(Services\PageService::class);
         $this->app->singleton(Services\TranslationService::class);
+        $this->app->singleton(Services\SlideService::class);
+        $this->app->singleton(Services\ClinicInfoService::class);
     }
 
     /**
@@ -61,10 +63,6 @@ class AppServiceProvider extends ServiceProvider
 
         Blade::directive('galleryTitle', function ($expression) {
             return "<?php echo (app('" . Services\WebsiteGalleryService::class . "')->getByKey({$expression}))?->title; ?>";
-        });
-
-        Blade::if('galleryAvailable', function (string $key): bool {
-            return app(Services\WebsiteGalleryService::class)->getByKey($key) !== null;
         });
     }
 }

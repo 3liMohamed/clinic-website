@@ -105,8 +105,9 @@ class AuditLogResource extends Resource
             ])
             ->recordActions([
                 ViewAction::make()
+                    ->iconButton()
                     ->modalWidth(Width::SixExtraLarge)
-                    ->hidden(fn($record) => \in_array($record->action, [AuditLogAction::Create])),
+                    ->hidden(fn($record) => \in_array($record->action, [AuditLogAction::Create, AuditLogAction::Restore])),
             ]);
     }
 

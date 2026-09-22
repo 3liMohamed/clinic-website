@@ -151,8 +151,7 @@ class UserResource extends Resource
                 Stack::make([
                     ImageColumn::make('avatar')
                         ->disk('images')
-                        ->imageHeight(90)
-                        ->imageWidth(90)
+                        ->imageSize(100)
                         ->extraImgAttributes([
                             'class' => 'rounded-lg mx-auto border-1 border-primary-50 dark:border-primary-500/10 object-cover',
                         ])
@@ -195,7 +194,7 @@ class UserResource extends Resource
                             ->label(__('system.field.phone')),
                     ])
                         ->from('md')
-                        ->extraAttributes(['class' => 'px-2 py-2 mx-auto gap-1.5']),
+                        ->extraAttributes(['class' => 'py-2 mx-auto gap-1.5']),
 
                 ])
                     ->space(1)
@@ -211,15 +210,15 @@ class UserResource extends Resource
             ])
             ->recordActions([
                 ViewAction::make()
-                    ->button()
+                    ->iconButton()
                     ->extraAttributes(['class' => '!ms-auto']),
-                EditAction::make()->button(),
-                DeleteAction::make()->button(),
-                ForceDeleteAction::make()->button(),
+                EditAction::make()->iconButton(),
+                DeleteAction::make()->iconButton(),
+                ForceDeleteAction::make()->iconButton(),
                 RestoreAction::make()->button(),
                 Action::make('permissions')
                     ->authorize(fn(User $user, User $record) => $user->can('permission', $record))
-                    ->button()
+                    ->iconButton()
                     ->icon(Heroicon::OutlinedShieldCheck)
                     ->color(Color::Emerald)
                     ->modalWidth(Width::FiveExtraLarge)
@@ -234,14 +233,9 @@ class UserResource extends Resource
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make()
-                        ->authorizeIndividualRecords('delete'),
-                    ForceDeleteBulkAction::make()
-                        ->authorize(fn(User $user) => $user->hasPermission('users', 'delete'))
-                        ->authorizeIndividualRecords('forceDelete'),
-                    RestoreBulkAction::make()
-                        ->authorize(fn(User $user) => $user->hasPermission('users', 'delete'))
-                        ->authorizeIndividualRecords('restore'),
+                    DeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
                 ]),
             ]);
     }

@@ -16,6 +16,7 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Schemas\Schema;
+use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
@@ -60,6 +61,10 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->renderHook(PanelsRenderHook::USER_MENU_BEFORE, fn() => view('filament.components.locale-switcher'))
             ->renderHook(PanelsRenderHook::BODY_END, fn() => view('filament.components.footer'))
+            ->assets([
+                Css::make('icofont', asset('assets/css/icofont.css')),
+                Css::make('font-awesome', asset('assets/css/font-awesome.min.css')),
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
@@ -87,7 +92,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label(fn () => __('system.settings.group'))
+                    ->label(fn() => __('system.settings.group'))
                     ->icon(Heroicon::OutlinedCog6Tooth),
             ])
             ->plugins([

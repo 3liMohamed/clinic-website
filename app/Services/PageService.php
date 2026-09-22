@@ -3,20 +3,31 @@
 namespace App\Services;
 
 use App\Models\Page;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class PageService
 {
-    protected const CACHE_PREFIX = 'pages:';
+    protected const CACHE_KEY = 'pages:all-visible';
+
+    /**
+     * Get all visible pages, ordered for navigation display.
+     * Single source of truth - cached once, everything else reads from this.
+     */
+    public function allVisible(): Collection
+    {
+        return Cache::rememberForever(self::CACHE_KEY, function () {
+            return Page::query()
+                ->where('is_visible', true)
+                ->orderBy('order')
+                ->get();
+        });
+    }
 
     public function findByName(string $name): ?Page
     {
-        return Cache::rememberForever(self::CACHE_PREFIX . $name, function () use ($name) {
-            return Page::query()
-                ->where('name', $name)
-                ->where('is_visible', true)
-                ->first();
-        });
+        return $this->allVisible()
+            ->firstWhere('name', $name);
     }
 
     public function findByNameOrFail(string $name): Page
@@ -39,13 +50,8 @@ class PageService
         return $page->isSectionVisible($sectionName);
     }
 
-    public function flush(string $name): void
+    public function flush(): void
     {
-        Cache::forget(self::CACHE_PREFIX . $name);
-    }
-
-    public function flushAll(): void
-    {
-        Page::query()->pluck('name')->each(fn (string $name) => $this->flush($name));
+        Cache::forget(self::CACHE_KEY);
     }
 }

@@ -85,8 +85,7 @@ class WebsiteGalleryResource extends Resource
             ->columns([
                 ImageColumn::make('image')
                     ->disk('images')
-                    ->imageHeight(100)
-                    ->imageWidth(100)
+                    ->imageSize(100)
                     ->square()
                     ->label(__('system.field.image')),
 
@@ -106,9 +105,9 @@ class WebsiteGalleryResource extends Resource
                 CreateAction::make(),
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+                ViewAction::make()->iconButton(),
+                EditAction::make()->iconButton(),
+                DeleteAction::make()->iconButton(),
             ]);
     }
 

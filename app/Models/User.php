@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable(['avatar', 'name', 'email', 'phone', 'password', 'is_active', 'permissions'])]
 #[Hidden(['password', 'remember_token'])]
@@ -51,7 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
 
     public function getFilamentAvatarUrl(): ?string
     {
-        return asset("images/{$this->avatar}");
+        return $this->avatar ? Storage::disk('images')->url($this->avatar) : asset('images/default.webp');
     }
 
 
@@ -91,8 +92,30 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
                 'force_delete' => true,
                 'permission' => true,
             ],
+            'slides' => [
+                'view' => true,
+                'create' => true,
+                'edit' => true,
+                'delete' => true,
+                'restore' => true,
+                'force_delete' => true,
+            ],
+            'clinic_infos' => [
+                'view' => true,
+                'create' => true,
+                'edit' => true,
+                'delete' => true,
+                'restore' => true,
+                'force_delete' => true,
+            ],
+            'features' => [
+                'view' => true,
+                'create' => true,
+                'edit' => true,
+                'delete' => true,
+                'restore' => true,
+                'force_delete' => true,
+            ],
         ];
     }
-
-
 }

@@ -56,7 +56,14 @@ trait HasAuditLog
             static::logAudit($model, AuditLogAction::Delete, $data);
         });
 
+        if (method_exists(static::class, 'restored')) {
+            static::restored(function (Model $model) {
+                self::logAudit($model, AuditLogAction::Restore);
+            });
+        }
     }
+
+
 
     protected static function logAudit(Model $model, AuditLogAction $action, ?array $changes = null): void
     {

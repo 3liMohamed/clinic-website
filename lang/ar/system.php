@@ -8,6 +8,8 @@ return [
         'deactivate' => 'deactivate',
         'published' => 'published',
         'unpublished' => 'unpublished',
+        'hide' => 'hide',
+        'show' => 'show',
     ],
     'field' => [
         'active' => 'نشط',
@@ -83,6 +85,19 @@ return [
         'price' => 'price',
         'is_highlight' => 'is_highlight',
         'category' => 'category',
+        'header_title' => 'header_title',
+        'nav_title' => 'nav_title',
+        'show_in_main_nav' => 'show_in_main_nav',
+        'show_in_top_nav' => 'show_in_top_nav',
+        'is_cta' => 'is_cta',
+        'primary_button_text' => 'primary_button_text',
+        'primary_button_url' => 'primary_button_url',
+        'secondary_button_text' => 'secondary_button_text',
+        'secondary_button_url' => 'secondary_button_url',
+        'icon' => 'icon',
+        'icon_helper' => 'icon_helper',
+        'link_text' => 'link_text',
+        'link_url' => 'link_url',
     ],
     'user' => [
         'model' => 'مستخدم',
@@ -107,55 +122,21 @@ return [
         'model' => 'ترجمه',
         'navigation' => 'ترجمه',
     ],
-    'model' => [
-        '' => '',
-    ],
-    'about' => [
-        'model' => 'model',
-        'navigation' => 'navigation',
-    ],
-    'slider' => [
-        'model' => 'model',
-        'navigation' => 'navigation',
-    ],
     'website_gallery' => [
         'model' => 'model',
         'navigation' => 'navigation',
     ],
-    'gym_class' => [
+    'model' => [
+        '' => '',
+    ],
+    'clinic_info' => [
         'model' => 'model',
         'navigation' => 'navigation',
     ],
-    'marquee' => [
-        'model' => 'model',
-        'navigation' => 'navigation',
+    'notification' => [
+        'updated' => 'updated',
     ],
-    'cta' => [
-        'model' => 'model',
-        'navigation' => 'navigation',
-    ],
-    'currency' => [
-        'egp' => 'egp',
-    ],
-    'pricing' => [
-        'max_active_body' => 'max_active_body',
-        'max_active_title' => 'max_active_title',
-        'model' => 'model',
-        'month' => 'month',
-        'navigation' => 'navigation',
-        'year' => 'year',
-    ],
-    'marketing' => [
-        'model' => 'model',
-        'navigation' => 'navigation',
-    ],
-    'choose' => [
-        'model' => 'model',
-        'navigation' => 'navigation',
-    ],
-    'post' => [
-        'max_publish_body' => 'max_publish_body',
-        'max_publish_title' => 'max_publish_title',
+    'slide' => [
         'model' => 'model',
         'navigation' => 'navigation',
     ],

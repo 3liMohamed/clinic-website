@@ -75,13 +75,9 @@ class PageResource extends Resource
                                 ->unique(ignoreRecord: true)
                                 ->disabled(app()->isProduction())
                                 ->dehydrated()
-                                ->columnSpanFull()
+                                ->columnSpan(Auth::id() === 1 ? 10 : 12)
                                 ->label(__('system.field.name')),
-                            TextInput::make('title')
-                                ->required()
-                                ->maxLength(255)
-                                ->columnSpan(10)
-                                ->label(__('system.field.title')),
+
                             Toggle::make('is_visible')
                                 ->default(true)
                                 ->onColor('success')
@@ -90,7 +86,45 @@ class PageResource extends Resource
                                 ->visible(Auth::id() === 1)
                                 ->columnSpan(Auth::id() === 1 ? 2 : 0)
                                 ->label(__('system.field.is_visible')),
+
+                            TextInput::make('header_title')
+                                ->required()
+                                ->maxLength(255)
+                                ->columnSpan(6)
+                                ->label(__('system.field.header_title')),
+
+                            TextInput::make('nav_title')
+                                ->required()
+                                ->maxLength(255)
+                                ->columnSpan(6)
+                                ->label(__('system.field.nav_title')),
+
+                            Toggle::make('show_in_main_nav')
+                                ->default(true)
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->inline(false)
+                                ->columnSpan(4)
+                                ->label(__('system.field.show_in_main_nav')),
+
+                            Toggle::make('show_in_top_nav')
+                                ->default(false)
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->inline(false)
+                                ->columnSpan(4)
+                                ->label(__('system.field.show_in_top_nav')),
+
+                            Toggle::make('is_cta')
+                                ->default(false)
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->inline(false)
+                                ->columnSpan(4)
+                                ->label(__('system.field.is_cta')),
+
                         ])->columns(12),
+
                     Step::make(__('system.field.sections_meta'))
                         ->icon(Heroicon::GlobeAlt)
                         ->schema([
@@ -107,6 +141,7 @@ class PageResource extends Resource
                                 ->columnSpanFull()
                                 ->label(__('system.field.meta_description')),
                         ]),
+
                     Step::make(__('system.field.sections_info'))
                         ->icon(Heroicon::RectangleStack)
                         ->schema([
@@ -130,7 +165,7 @@ class PageResource extends Resource
 
                                 ])
                                 ->label(__('system.field.page_sections'))
-                                ->defaultItems(1)
+                                ->defaultItems(0)
                                 ->columns(12)
                                 ->columnSpanFull()
                                 ->orderColumn('sort')
@@ -146,19 +181,27 @@ class PageResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderable('order')
+            ->defaultSort('order')
             ->recordTitleAttribute('name')
             ->columns([
                 ImageColumn::make('image')
                     ->disk('images')
-                    ->imageHeight(100)
-                    ->imageWidth(100)
+                    ->imageSize(100)
                     ->label(__('system.field.image')),
+
                 TextColumn::make('name')
                     ->searchable()
                     ->label(__('system.field.name')),
-                TextColumn::make('title')
+
+                TextColumn::make('header_title')
                     ->searchable()
-                    ->label(__('system.field.title')),
+                    ->label(__('system.field.header_title')),
+
+                TextColumn::make('nav_title')
+                    ->searchable()
+                    ->label(__('system.field.nav_title')),
+
                 TextColumn::make('meta_keywords')
                     ->searchable()
                     ->badge()

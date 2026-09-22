@@ -1,15 +1,9 @@
 <?php
 
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
-use App\Services\PageService;
 
 Route::get('locale/{locale}', LocaleController::class)->name('locale');
 
-Route::get('/', function (PageService $pageService) {
-
-    $page = $pageService->findByNameOrFail('home');
-    // return $page;
-    return view('pages.home', compact('page'));
-
-})->name('home');
+Route::get('/', [PageController::class, 'show'])->defaults('name', 'home')->name('home');

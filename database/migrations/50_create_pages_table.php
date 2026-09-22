@@ -15,11 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('image')->default('og/default.webp');
             $table->string('name')->unique();
-            $table->json('title')->nullable();
+            $table->json('header_title')->nullable();
+            $table->json('nav_title')->nullable();
             $table->boolean('is_visible');
+            $table->boolean('show_in_main_nav')->default(true);
+            $table->boolean('show_in_top_nav')->default(false);
+            $table->boolean('is_cta')->default(false);
             $table->json('meta_keywords');
             $table->json('meta_description');
             $table->json('sections');
+            $table->unsignedInteger('order')->default(0);
         });
     }
 

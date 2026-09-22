@@ -12,9 +12,11 @@
         "laravel/framework": "^13.17",
         "laravel/octane": "^2.19",
         "laravel/tinker": "^3.0",
-        "malzariey/filament-daterangepicker-filter": "^5.0"
+        "malzariey/filament-daterangepicker-filter": "^5.0",
+        "mrpunyapal/filament-infinite-select": "^0.2.0"
     },
     "require-dev": {
+        "laravel/boost": "^2.9",
         "laravel/pint": "^1.27",
         "nunomaduro/collision": "^8.6"
     },

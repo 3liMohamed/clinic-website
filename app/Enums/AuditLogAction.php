@@ -13,6 +13,7 @@ enum AuditLogAction: int implements HasColor, HasIcon, HasLabel
     case Create = 0;
     case Update = 1;
     case Delete = 2;
+    case Restore = 3;
 
     public function getLabel(): string|Htmlable|null
     {
@@ -20,6 +21,7 @@ enum AuditLogAction: int implements HasColor, HasIcon, HasLabel
             self::Create => __('system.field.create'),
             self::Update => __('system.field.update'),
             self::Delete => __('system.field.delete'),
+            self::Restore => __('system.field.restore'),
         };
     }
 
@@ -29,15 +31,17 @@ enum AuditLogAction: int implements HasColor, HasIcon, HasLabel
             self::Create => 'success',
             self::Update => 'primary',
             self::Delete => 'danger',
+            self::Restore => 'warning',
         };
     }
 
     public function getIcon(): string|BackedEnum|Htmlable|null
     {
         return match ($this) {
-            self::Create => 'heroicon-o-plus',
-            self::Update => 'heroicon-o-pencil',
-            self::Delete => 'heroicon-o-trash',
+            self::Create  => 'heroicon-o-plus-circle',
+            self::Update  => 'heroicon-o-pencil-square',
+            self::Delete  => 'heroicon-o-trash',
+            self::Restore => 'heroicon-o-arrow-uturn-left',
         };
     }
 }

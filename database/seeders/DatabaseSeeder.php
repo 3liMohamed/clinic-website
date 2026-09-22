@@ -13,8 +13,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->seedUsers();
-        // $this->seedSettings();
+        $this->seedUsers();
+        $this->seedSettings();
     }
 
     private function seedUsers(): void
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
         $items = [
             [
                 'key' => 'appearance:language',
-                'value' => 'ar',
+                'value' => 'en',
             ],
             [
                 'key' => 'appearance:theme',
@@ -46,27 +46,27 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'key' => 'appearance:color',
-                'value' => 'Gray',
+                'value' => 'Sky',
             ],
             [
                 'key' => 'site:name',
-                'value' => 'MyGyms',
+                'value' => 'SiteName',
             ],
             [
                 'key' => 'logo:favicon',
-                'value' => 'settings/01M1NQWYNFQVNHY6BNYAXMYPG1.png',
+                'value' => 'default.webp',
             ],
             [
                 'key' => 'logo:light',
-                'value' => 'settings/01M1NQWYNGNMDZ6J4EQTQCHC3M.png',
+                'value' => 'default.webp',
             ],
             [
                 'key' => 'logo:dark',
-                'value' => 'settings/01M1NQWYNGNMDZ6J4EQTQCHC3N.png',
+                'value' => 'default.webp',
             ],
             [
                 'key' => 'contact:phone',
-                'value' => '1110208574',
+                'value' => '+201110208574',
             ],
             [
                 'key' => 'contact:email',
@@ -74,23 +74,23 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'key' => 'contact:address',
-                'value' => 'asd',
+                'value' => 'address',
             ],
             [
                 'key' => 'social:facebook',
-                'value' => 'https://www.facebook.com/',
+                'value' => '#',
             ],
             [
                 'key' => 'social:instagram',
-                'value' => 'https://www.facebook.com/',
+                'value' => '#',
             ],
             [
                 'key' => 'social:twitter',
-                'value' => 'https://www.facebook.com/',
+                'value' => '#',
             ],
             [
                 'key' => 'social:youtube',
-                'value' => 'https://www.facebook.com/',
+                'value' => '#',
             ],
         ];
 
