@@ -19,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(Services\TranslationService::class);
         $this->app->singleton(Services\SlideService::class);
         $this->app->singleton(Services\ClinicInfoService::class);
+        $this->app->singleton(Services\FeatureService::class);
+        $this->app->singleton(Services\StatisticService::class);
+        $this->app->singleton(Services\WhyChooseService::class);
+        $this->app->singleton(Services\CallActionService::class);
     }
 
     /**

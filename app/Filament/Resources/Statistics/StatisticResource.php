@@ -38,7 +38,7 @@ class StatisticResource extends Resource
     use SoftDeletes, Translatable;
     protected static ?string $model = Statistic::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChartBar;
 
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -106,6 +106,7 @@ class StatisticResource extends Resource
             ])
             ->recordActions([
                 Action::make('toggleVisibility')
+                    ->authorize(fn(Statistic $record) => auth()->user()->can('toggleVisibility', $record))
                     ->label(fn(Statistic $record) => $record->is_visible ? __('system.action.hide') : __('system.action.show'))
                     ->icon(fn(Statistic $record) => $record->is_visible ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
                     ->color(fn(Statistic $record) => $record->is_visible ? 'danger' : 'success')

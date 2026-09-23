@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ClinicInfos;
 use App\Filament\Forms\Components\IconSelect;
 use App\Filament\Resources\ClinicInfos\Pages\ManageClinicInfos;
 use App\Models\ClinicInfo;
+use App\Models\User;
 use App\Rules\ValidOrHash;
 use App\Services\ClinicInfoService;
 use BackedEnum;
@@ -32,6 +33,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use LaraZeus\SpatieTranslatable\Actions\LocaleSwitcher;
 use LaraZeus\SpatieTranslatable\Resources\Concerns\Translatable;
@@ -39,7 +41,8 @@ use Illuminate\Support\Str;
 
 class ClinicInfoResource extends Resource
 {
-    use Translatable;
+    use Translatable, SoftDeletes;
+
     protected static ?string $model = ClinicInfo::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHeart;
@@ -126,6 +129,7 @@ class ClinicInfoResource extends Resource
             ])
             ->recordActions([
                 Action::make('toggleVisibility')
+                    ->authorize(fn(ClinicInfo $record) => auth()->user()->can('toggleVisibility', $record))
                     ->label(fn(ClinicInfo $record) => $record->is_visible ? __('system.action.hide') : __('system.action.show'))
                     ->icon(fn(ClinicInfo $record) => $record->is_visible ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
                     ->color(fn(ClinicInfo $record) => $record->is_visible ? 'danger' : 'success')

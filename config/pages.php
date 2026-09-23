@@ -9,6 +9,8 @@ return [
             'clinic infos' => 'sections.clinic-infos',
             'features' => 'sections.features',
             'statistics' => 'sections.statistics',
+            'why choose' => 'sections.why-choose',
+            'call action' => 'sections.call-action',
         ],
     ],
 

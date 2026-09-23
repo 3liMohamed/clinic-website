@@ -99,6 +99,8 @@ return [
         'link_text' => 'link_text',
         'link_url' => 'link_url',
         'count' => 'count',
+        'column' => 'column',
+        'content' => 'content',
     ],
     'user' => [
         'model' => 'User',
@@ -148,5 +150,21 @@ return [
     'statistic' => [
         'model' => 'Statistic',
         'navigation' => 'Statistics',
+    ],
+    'call_action' => [
+        'model' => 'Call Action',
+        'navigation' => 'Call Action',
+    ],
+    'option' => [
+        'left' => 'left',
+        'right' => 'right',
+    ],
+    'section' => [
+        'basic_information' => 'Basic Information',
+        'content' => 'content',
+    ],
+    'why_choose' => [
+        'model' => 'Why Choose',
+        'navigation' => 'Why Choose',
     ],
 ];

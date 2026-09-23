@@ -7,7 +7,7 @@
                 <div class="col-lg-12">
                     <div class="section-title">
                         <h2>@t('sections', 'features.title')</h2>
-                        <img src="@galleryImage('sections:features')" alt="@galleryTitle('sections:features')" />
+                        <img src="@galleryImage('sections:sections_image')" alt="@galleryTitle('sections:sections_image')" />
                         <p>@t('sections', 'features.description')</p>
                     </div>
                 </div>

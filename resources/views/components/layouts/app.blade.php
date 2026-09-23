@@ -78,7 +78,7 @@
     <!-- Animate CSS -->
     <link rel="stylesheet" href="@asset('assets/css/animate.min.css')" />
     <!-- Magnific Popup CSS -->
-    <link rel="stylesheet" href="css/magnific-popup.css')" />
+    <link rel="stylesheet" href="@asset('assets/css/magnific-popup.css')" />
 
     <!-- Mediplus CSS -->
     <link rel="stylesheet" href="@asset('assets/css/normalize.css')" />

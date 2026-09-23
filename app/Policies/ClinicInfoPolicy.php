@@ -63,6 +63,11 @@ class ClinicInfoPolicy
         return $user->hasPermission('clinic_infos', 'force_delete');
     }
 
+    public function toggleVisibility(User $user, ClinicInfo $clinicInfo): bool
+    {
+        return $user->hasPermission('clinic_infos', 'visibility');
+    }
+
     public function deleteAny(User $user): bool
     {
         return $user->hasPermission('clinic_infos', 'delete');

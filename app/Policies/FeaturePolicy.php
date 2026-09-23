@@ -63,6 +63,11 @@ class FeaturePolicy
         return $user->hasPermission('features', 'force_delete');
     }
 
+    public function toggleVisibility(User $user, Feature $Feature): bool
+    {
+        return $user->hasPermission('features', 'visibility');
+    }
+
     public function deleteAny(User $user): bool
     {
         return $user->hasPermission('features', 'delete');

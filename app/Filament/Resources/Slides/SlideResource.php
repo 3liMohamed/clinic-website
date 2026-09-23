@@ -24,6 +24,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
@@ -127,6 +128,10 @@ class SlideResource extends Resource
                     ->description(fn(Slide $record): ?string => Str::limit($record->description, 50))
                     ->searchable()
                     ->label(__('system.field.title')),
+
+                IconColumn::make('is_visible')
+                    ->boolean()
+                    ->label(__('system.field.is_visible')),
             ])
             ->headerActions([
                 LocaleSwitcher::make(),

@@ -1,6 +1,6 @@
 @if ($statistics->isNotEmpty())
     <!-- Start Fun-facts -->
-    <div id="fun-facts" class="fun-facts section overlay">
+    <div id="fun-facts" class="fun-facts section overlay"style="background-image: url('@galleryImage('sections:statistics_bg')')">
         <div class="container">
             <div class="row">
                 @foreach ($statistics as $statistic)

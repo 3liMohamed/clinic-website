@@ -107,6 +107,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
                 'delete' => true,
                 'restore' => true,
                 'force_delete' => true,
+                'visibility' => true,
             ],
             'features' => [
                 'view' => true,
@@ -115,6 +116,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
                 'delete' => true,
                 'restore' => true,
                 'force_delete' => true,
+                'visibility' => true,
             ],
             'statistics' => [
                 'view' => true,
@@ -123,6 +125,25 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
                 'delete' => true,
                 'restore' => true,
                 'force_delete' => true,
+                'visibility' => true,
+            ],
+            'why_chooses' => [
+                'view' => true,
+                'create' => true,
+                'edit' => true,
+                'delete' => true,
+                'restore' => true,
+                'force_delete' => true,
+                'visibility' => true,
+            ],
+            'call_actions' => [
+                'view' => true,
+                'create' => true,
+                'edit' => true,
+                'delete' => true,
+                'restore' => true,
+                'force_delete' => true,
+                'visibility' => true,
             ],
         ];
     }

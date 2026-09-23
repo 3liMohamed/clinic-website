@@ -17,7 +17,6 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\ReplicateAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
@@ -105,8 +104,8 @@ class FeatureResource extends Resource
                 CreateAction::make(),
             ])
             ->recordActions([
-                ReplicateAction::make(),
                 Action::make('toggleVisibility')
+                    ->authorize(fn(Feature $record) => auth()->user()->can('toggleVisibility', $record))
                     ->label(fn(Feature $record) => $record->is_visible ? __('system.action.hide') : __('system.action.show'))
                     ->icon(fn(Feature $record) => $record->is_visible ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
                     ->color(fn(Feature $record) => $record->is_visible ? 'danger' : 'success')

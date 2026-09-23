@@ -65,6 +65,11 @@ class StatisticPolicy
         return $user->hasPermission('statistics', 'force_delete');
     }
 
+    public function toggleVisibility(User $user, Statistic $statistic): bool
+    {
+        return $user->hasPermission('statistics', 'visibility');
+    }
+
     public function deleteAny(User $user): bool
     {
         return $user->hasPermission('statistics', 'delete');
