@@ -2,51 +2,50 @@
 
 namespace App\Policies;
 
-use App\Models\Setting;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
-class SettingPolicy
+class SettingPolicy extends BasePolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    protected string $permission = 'settings';
+
+    public function updateAny(User $user): bool
     {
-        return $user->hasPermission('settings', 'view');
+        return $this->can($user, 'edit');
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Setting $setting): bool
-    {
-        return $user->hasPermission('settings', 'view');
-    }
 
-    /**
-     * Determine whether the user can create models.
-     */
     public function create(User $user): bool
     {
         return false;
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Setting $setting): bool
+    public function delete(User $user, Model $model): bool
     {
-        return $user->hasPermission('settings', 'edit');
-    }
-    public function updateSettings(User $user): bool
-    {
-        return $user->hasPermission('settings', 'edit');
+        return false;
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Setting $setting): bool
+    public function restore(User $user, Model $model): bool
+    {
+        return false;
+    }
+
+    public function forceDelete(User $user, Model $model): bool
+    {
+        return false;
+    }
+
+    public function deleteAny(User $user): bool
+    {
+        return false;
+    }
+
+    public function restoreAny(User $user): bool
+    {
+        return false;
+    }
+
+    public function forceDeleteAny(User $user): bool
     {
         return false;
     }

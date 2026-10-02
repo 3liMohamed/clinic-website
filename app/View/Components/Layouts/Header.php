@@ -11,14 +11,13 @@ use Illuminate\View\Component;
 
 class Header extends Component
 {
-    public Collection $mainNavPages;
-    public Collection $topNavPages;
+    public ?Collection $mainNavPages;
+    public ?Collection $topNavPages;
     public ?Page $ctaPage;
 
     public function __construct(PageService $pageService)
     {
-
-        $pages = $pageService->allVisible();
+        $pages = $pageService->allVisibleMain();
         $this->mainNavPages = $pages->filter->isInMainNav()->values();
         $this->topNavPages = $pages->filter->isInTopNav()->values();
         $this->ctaPage = $pages->first->isCta();

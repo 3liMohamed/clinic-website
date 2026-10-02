@@ -6,7 +6,7 @@ use App\Models\Feature;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 
-class FeatureService
+class FeatureService extends BaseService
 {
     protected const CACHE_KEY = 'Feature:all-visible';
 
@@ -48,8 +48,8 @@ class FeatureService
         return self::MAX_VISIBLE;
     }
 
-    public function flush(): void
+    protected function cacheKey(): string
     {
-        Cache::forget(self::CACHE_KEY);
+        return self::CACHE_KEY;
     }
 }

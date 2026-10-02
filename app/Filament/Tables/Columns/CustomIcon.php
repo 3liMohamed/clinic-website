@@ -25,7 +25,7 @@ class CustomIcon extends Column implements HasEmbeddedView
         $state = e($state);
 
         return <<<HTML
-            <div class="!w-full !p-2 !mx-4 !text-center">
+            <div class="!w-full !p-2 !text-center">
                 <i class="{$state} !text-6xl !text-primary-600"></i>
             </div>
         HTML;

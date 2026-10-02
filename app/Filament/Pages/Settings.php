@@ -49,7 +49,7 @@ class Settings extends Page
 
     public static function canEdit(): bool
     {
-        return Auth::user()?->can('updateSettings', Setting::class) ?? false;
+        return Auth::user()?->can('updateAny', Setting::class) ?? false;
     }
 
     public ?array $data = [];
@@ -66,7 +66,7 @@ class Settings extends Page
 
     public function save(SettingService $settingService): void
     {
-        $this->authorize('updateSettings', Setting::class);
+        $this->authorize('updateAny', Setting::class);
         $data = $this->form->getState();
 
         foreach ($data as $key => $value) {
@@ -158,17 +158,18 @@ class Settings extends Page
                         TextInput::make('contact:phone')
                             ->required()
                             ->prefix('+20')
-                            ->rule('regex:/^(#|(\+20)?1[0125][0-9]{8})$/')
+                            ->rule(ValidOrHash::phoneOrHash())
                             ->columnSpan(4)
                             ->label(__('system.field.phone')),
 
                         TextInput::make('contact:email')
                             ->required()
-                            ->rule('regex:/^(#|.+@.+\..+)$/')
+                            ->rule(ValidOrHash::emailOrHash())
                             ->columnSpan(4)
                             ->label(__('system.field.email')),
 
                         TextInput::make('contact:address')
+                            ->default('#')
                             ->required()
                             ->columnSpan(4)
                             ->label(__('system.field.address')),

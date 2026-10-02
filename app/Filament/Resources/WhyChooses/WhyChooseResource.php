@@ -45,6 +45,12 @@ class WhyChooseResource extends Resource
 {
     use Translatable, SoftDeletes;
 
+    protected static ?string $model = WhyChoose::class;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCheckBadge;
+
+    protected static ?string $recordTitleAttribute = 'title';
+
     public static function getPluralModelLabel(): string
     {
         return __('system.why_choose.navigation');
@@ -53,12 +59,6 @@ class WhyChooseResource extends Resource
     {
         return __('system.why_choose.model');
     }
-
-    protected static ?string $model = WhyChoose::class;
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCheckBadge;
-
-    protected static ?string $recordTitleAttribute = 'title';
 
     public static function form(Schema $schema): Schema
     {
@@ -152,7 +152,6 @@ class WhyChooseResource extends Resource
         return $table
             ->recordTitleAttribute('title')
             ->columns([
-
                 ImageColumn::make('image')
                     ->disk('images')
                     ->imageSize(100)

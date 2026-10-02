@@ -80,6 +80,7 @@ class StatisticResource extends Resource
             ->reorderable('order')
             ->defaultSort('order')
             ->recordTitleAttribute('title')
+            ->afterReordering(fn (array $order) => app(StatisticService::class)->flush())
             ->columns([
                 CustomIcon::make('icon')
                     ->label(__('system.field.icon')),

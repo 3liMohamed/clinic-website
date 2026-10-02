@@ -71,6 +71,7 @@ class FeatureResource extends Resource
                     ->label(__('system.field.title')),
 
                 Textarea::make('description')
+                    ->required()
                     ->rows(3)
                     ->columnSpanFull()
                     ->label(__('system.field.description')),
@@ -83,6 +84,7 @@ class FeatureResource extends Resource
             ->reorderable('order')
             ->defaultSort('order')
             ->recordTitleAttribute('title')
+            ->afterReordering(fn (array $order) => app(FeatureService::class)->flush())
             ->columns([
                 CustomIcon::make('icon')
                     ->label(__('system.field.icon')),

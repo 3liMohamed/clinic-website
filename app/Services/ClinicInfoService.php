@@ -6,7 +6,7 @@ use App\Models\ClinicInfo;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 
-class ClinicInfoService
+class ClinicInfoService extends BaseService
 {
     protected const CACHE_KEY = 'clinic-infos:all-visible';
     protected const MAX_VISIBLE = 3;
@@ -46,8 +46,8 @@ class ClinicInfoService
         return self::MAX_VISIBLE;
     }
 
-    public function flush(): void
+    protected function cacheKey(): string
     {
-        Cache::forget(self::CACHE_KEY);
+        return self::CACHE_KEY;
     }
 }

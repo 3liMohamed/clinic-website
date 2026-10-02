@@ -6,7 +6,7 @@ use App\Models\Slide;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 
-class SlideService
+class SlideService extends BaseService
 {
     protected const CACHE_KEY = 'slides:all-visible';
 
@@ -20,8 +20,8 @@ class SlideService
         });
     }
 
-    public function flush(): void
+    protected function cacheKey(): string
     {
-        Cache::forget(self::CACHE_KEY);
+        return self::CACHE_KEY;
     }
 }

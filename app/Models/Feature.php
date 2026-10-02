@@ -38,9 +38,9 @@ class Feature extends Model
 
     protected static function booted(): void
     {
-        static::saved(fn () => app(FeatureService::class)->flush());
-        static::deleted(fn () => app(FeatureService::class)->flush());
-        static::restored(fn () => app(FeatureService::class)->flush());
+        static::saved(fn() => app(FeatureService::class)->flush());
+        static::deleted(fn() => app(FeatureService::class)->flush());
+        static::restored(fn() => app(FeatureService::class)->flush());
     }
 
     public function scopeVisible(Builder $query): Builder

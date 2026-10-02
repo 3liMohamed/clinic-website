@@ -103,6 +103,7 @@ class ClinicInfoResource extends Resource
             ->reorderable('order')
             ->defaultSort('order')
             ->recordTitleAttribute('subtitle')
+            ->afterReordering(fn (array $order) => app(ClinicInfoService::class)->flush())
             ->columns([
                 CustomIcon::make('icon')
                     ->label(__('system.field.icon')),

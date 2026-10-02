@@ -6,7 +6,7 @@ use App\Models\WhyChoose;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
-class WhyChooseService
+class WhyChooseService extends BaseService
 {
     protected const CACHE_KEY = 'why-choose:visible-with-items';
 
@@ -39,8 +39,8 @@ class WhyChooseService
     }
 
 
-    public function flush(): void
+    protected function cacheKey(): string
     {
-        Cache::forget(self::CACHE_KEY);
+        return self::CACHE_KEY;
     }
 }

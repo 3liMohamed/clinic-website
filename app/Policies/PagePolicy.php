@@ -2,47 +2,19 @@
 
 namespace App\Policies;
 
-use App\Models\Page;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
-class PagePolicy
+class PagePolicy extends BasePolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        return $user->hasPermission('pages', 'view');
-    }
+    protected string $permission = 'pages';
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Page $page): bool
-    {
-        return $user->hasPermission('pages', 'view');
-    }
-
-    /**
-     * Determine whether the user can create models.
-     */
     public function create(User $user): bool
     {
         return app()->isLocal();
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Page $page): bool
-    {
-        return $user->hasPermission('pages', 'edit');
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Page $page): bool
+    public function delete(User $user, Model $model): bool
     {
         return app()->isLocal();
     }

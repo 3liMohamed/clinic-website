@@ -78,6 +78,7 @@ class CallActionResource extends Resource
                     ->label(__('system.field.title')),
 
                 Textarea::make('description')
+                    ->required()
                     ->rows(3)
                     ->columnSpanFull()
                     ->label(__('system.field.description')),

@@ -6,7 +6,7 @@ use App\Models\WebsiteGallery;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
-class WebsiteGalleryService
+class WebsiteGalleryService extends BaseService
 {
     protected const CACHE_KEY = 'website_gallery:all';
 
@@ -24,8 +24,8 @@ class WebsiteGalleryService
             ->first();
     }
 
-    public function flush(): void
+    protected function cacheKey(): string
     {
-        Cache::forget(self::CACHE_KEY);
+        return self::CACHE_KEY;
     }
 }

@@ -35,25 +35,32 @@ class IconSelect extends Select
 
     protected function renderOption(string $class, string $label): string
     {
-        return "<i class='{$class}' style='font-size: 1.25rem; width: 1.5rem; display: inline-block; text-align: center;'></i> <span style='margin-inline-start: 0.5rem;'>{$label}</span>";
+        return "<span style='display: flex; align-items: center;'>
+                    <i class='{$class} text-primary-600'
+                    style='font-size: 1.5rem; width: 2rem; display: inline-block; text-align: center;'></i>
+
+                    <span style='margin-inline-start: 0.5rem;'>{$label}</span>
+                </span>";
     }
 
     protected function availableIcons(): array
     {
         $keywords = $this->clinicRelevantKeywords();
 
-            return $this->extractIcofontIcons()
-                ->merge($this->extractFontAwesomeIcons())
-                ->filter(
-                    fn(string $label, string $class) =>
-                    collect($keywords)->contains(fn($keyword) => str_contains($class, $keyword))
-                )
-                ->toArray();
+        return $this->extractIcofontIcons()
+            ->merge($this->extractFontAwesomeIcons())
+            ->filter(
+                fn(string $label, string $class) =>
+                collect($keywords)->contains(fn($keyword) => str_contains($class, $keyword))
+            )
+            ->toArray();
     }
 
     protected function clinicRelevantKeywords(): array
     {
         return [
+            'ui',
+            'listening',
             'smile',
             'simple',
             'table',
@@ -176,6 +183,59 @@ class IconSelect extends Select
             'info',
             'check',
             'shield',
+
+            // Social
+            'facebook',
+            'twitter',
+            'x-twitter',
+            'instagram',
+            'linkedin',
+            'youtube',
+            'google',
+            'google-plus',
+            'google-plus-g',
+            'whatsapp',
+            'telegram',
+            'tiktok',
+            'snapchat',
+            'pinterest',
+            'pinterest-p',
+            'reddit',
+            'reddit-alien',
+            'github',
+            'gitlab',
+            'bitbucket',
+            'stackoverflow',
+            'skype',
+            'vimeo',
+            'vimeo-v',
+            'flickr',
+            'tumblr',
+            'tumblr-square',
+            'dribbble',
+            'behance',
+            'behance-square',
+            'medium',
+            'medium-m',
+            'soundcloud',
+            'spotify',
+            'twitch',
+            'discord',
+            'vk',
+            'weibo',
+            'xing',
+            'yelp',
+            'qq',
+            'wechat',
+            'line',
+            'threads',
+            'mastodon',
+            'odnoklassniki',
+            'stumbleupon',
+            'delicious',
+            'digg',
+            'rss',
+            'feed',
         ];
     }
 

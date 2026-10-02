@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Users\Pages;
 
-
 use App\Models\User;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Toggle;
@@ -32,10 +31,15 @@ class PermissionForm
         $sections = [];
 
         foreach ($merged as $section => $permissionList) {
-            $sections[] = Section::make(ucwords(str_replace(['_', '-'], ' ', $section)))
+            $sections[] = Section::make(self::sectionLabel($section))
                 ->schema(self::buildPermissionCheckboxes($section, $permissionList))
                 ->collapsed()
-                ->columns(count($permissionList) + 1);
+                ->columns([
+                    'default' => 2,
+                    'sm' => 3,
+                    'md' => 4,
+                    'lg' => 6,
+                ]);
         }
 
         return $sections;
@@ -47,10 +51,12 @@ class PermissionForm
             ->flatten()
             ->every(fn ($v) => $v === true);
 
-        return Section::make('Enable All')
+        return Section::make(__('system.permissions.enable_all'))
             ->schema([
                 Toggle::make('_all')
-                    ->label(fn (bool $state) => $state ? 'Enable All' : 'Disable All')
+                    ->label(fn (bool $state) => $state
+                        ? __('system.permissions.enable_all')
+                        : __('system.permissions.disable_all'))
                     ->afterStateHydrated(fn (Set $set) => $set('_all', $allEnabled))
                     ->default($allEnabled)
                     ->onIcon(Heroicon::Check)
@@ -76,10 +82,13 @@ class PermissionForm
         $allSectionEnabled = collect($permissionList)->every(fn ($v) => (bool) $v === true);
 
         $checkboxes[] = Toggle::make("{$section}._enabled")
-            ->label(fn (bool $state) => $state ? 'Disable' : 'Enable')
+            ->label(fn (bool $state) => $state
+                ? __('system.permissions.disable')
+                : __('system.permissions.enable'))
             ->afterStateHydrated(fn (Set $set) => $set("{$section}._enabled", $allSectionEnabled))
             ->onIcon(Heroicon::Check)
             ->offIcon(Heroicon::XMark)
+            ->inline(false)
             ->offColor('danger')
             ->dehydrated(false)
             ->live()
@@ -93,10 +102,11 @@ class PermissionForm
 
         foreach ($permissionList as $key => $isChecked) {
             $checkboxes[] = Checkbox::make("{$section}.{$key}")
-                ->label(ucwords(str_replace(['_', '-'], ' ', $key)))
+                ->label(self::abilityLabel($key))
                 ->default($isChecked)
                 ->live()
                 ->columnSpan(1)
+                ->inline(false)
                 ->afterStateUpdated(function (Get $get, Set $set) use ($section) {
                     $currentSection = $get($section) ?? [];
 
@@ -153,5 +163,24 @@ class PermissionForm
 
         $set('_all', $isEverythingEnabled);
     }
-}
 
+    protected static function sectionLabel(string $section): string
+    {
+        $key = "system.permissions.sections.{$section}";
+        $translated = __($key);
+
+        return $translated !== $key
+            ? $translated
+            : ucwords(str_replace(['_', '-'], ' ', $section));
+    }
+
+    protected static function abilityLabel(string $ability): string
+    {
+        $key = "system.permissions.abilities.{$ability}";
+        $translated = __($key);
+
+        return $translated !== $key
+            ? $translated
+            : ucwords(str_replace(['_', '-'], ' ', $ability));
+    }
+}

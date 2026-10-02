@@ -7,7 +7,7 @@
                     <div class="col-lg-6 col-md-5 col-12">
                         <!-- Contact -->
                         <ul class="top-link">
-                            @foreach ($mainNavPages as $page)
+                            @foreach ($topNavPages as $page)
                                 @php($routeName = config("pages.{$page->name}.route"))
 
                                 @if ($routeName && Route::has($routeName))

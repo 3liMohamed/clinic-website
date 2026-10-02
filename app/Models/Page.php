@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Enums\PageType;
 use App\Services\PageService;
 use App\Traits\HasAuditLog;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Translatable\HasTranslations;
 
@@ -17,16 +19,28 @@ class Page extends Model
 
     protected $fillable = [
         'image',
+
         'name',
+
         'header_title',
         'nav_title',
-        'is_visible',
+
+        'type',
+
         'show_in_main_nav',
         'show_in_top_nav',
         'is_cta',
+
         'meta_keywords',
         'meta_description',
+
+        'show_breadcrumb',
+        'breadcrumb_title',
+        'breadcrumb_image',
+
         'sections',
+
+        'is_visible',
         'order',
     ];
 
@@ -34,9 +48,11 @@ class Page extends Model
     {
         return [
             'is_visible' => 'boolean',
+            'type' => PageType::class,
             'order' => 'integer',
             'show_in_main_nav' => 'boolean',
             'show_in_top_nav' => 'boolean',
+            'show_breadcrumb' => 'boolean',
             'is_cta' => 'boolean',
             'sections' => 'array',
         ];
@@ -47,6 +63,7 @@ class Page extends Model
         'nav_title',
         'meta_keywords',
         'meta_description',
+        'breadcrumb_title',
     ];
 
     protected static function booted(): void
@@ -64,12 +81,37 @@ class Page extends Model
     }
     public function getImageUrlAttribute(): ?string
     {
-        return $this->image ? Storage::disk('images')->url($this->image) : asset('images/default.webp');
+        return Storage::disk('images')->url($this->image ?: 'default.webp');
+    }
+
+    public function getBreadcrumbImageUrlAttribute(): ?string
+    {
+        return Storage::disk('images')->url($this->breadcrumb_image ?: 'default.webp');
     }
 
     public function scopeVisible(Builder $query): Builder
     {
         return $query->where('is_visible', true);
+    }
+
+    public function isMainPage(): bool
+    {
+        return $this->type === PageType::Main;
+    }
+
+    public function isDetailsPage(): bool
+    {
+        return $this->type === PageType::Details;
+    }
+
+    public function scopeMainPages(Builder $query): Builder
+    {
+        return $query->where('type', PageType::Main);
+    }
+
+    public function scopeDetailsPages(Builder $query): Builder
+    {
+        return $query->where('type', PageType::Details);
     }
 
     public function isInMainNav(): bool
@@ -97,5 +139,11 @@ class Page extends Model
         $section = collect($this->sections ?? [])->firstWhere('name', $name);
 
         return $section['is_visible'] ?? false;
+    }
+
+    public function breadcrumbItems(): HasMany
+    {
+        return $this->hasMany(BreadcrumbItem::class)
+            ->orderBy('order');
     }
 }

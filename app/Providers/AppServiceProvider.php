@@ -13,16 +13,24 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->singleton(Services\PageService::class);
+        $this->app->singleton(Services\DetailResolver::class);
+        $this->app->singleton(Services\DetailPageService::class);
+
         $this->app->singleton(Services\SettingService::class);
         $this->app->singleton(Services\WebsiteGalleryService::class);
-        $this->app->singleton(Services\PageService::class);
         $this->app->singleton(Services\TranslationService::class);
+
         $this->app->singleton(Services\SlideService::class);
         $this->app->singleton(Services\ClinicInfoService::class);
         $this->app->singleton(Services\FeatureService::class);
         $this->app->singleton(Services\StatisticService::class);
         $this->app->singleton(Services\WhyChooseService::class);
         $this->app->singleton(Services\CallActionService::class);
+        $this->app->singleton(Services\PortfolioService::class);
+        $this->app->singleton(Services\ServiceService::class);
+        $this->app->singleton(Services\TestimonialService::class);
+        $this->app->singleton(Services\DepartmentService::class);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Slides;
 use App\Filament\Resources\Slides\Pages\ManageSlides;
 use App\Models\Slide;
 use App\Rules\ValidOrHash;
+use App\Services\SlideService;
 use BackedEnum;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
@@ -42,7 +43,7 @@ class SlideResource extends Resource
 
     protected static ?string $model = Slide::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSquares2x2;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -118,6 +119,7 @@ class SlideResource extends Resource
             ->reorderable('order')
             ->defaultSort('order')
             ->recordTitleAttribute('title')
+            ->afterReordering(fn (array $order) => app(SlideService::class)->flush())
             ->columns([
                 ImageColumn::make('image')
                     ->disk('images')

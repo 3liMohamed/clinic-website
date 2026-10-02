@@ -52,7 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
 
     public function getFilamentAvatarUrl(): ?string
     {
-        return $this->avatar ? Storage::disk('images')->url($this->avatar) : asset('images/default.webp');
+        return Storage::disk('images')->url($this->avatar ?: 'default.webp');
     }
 
 
@@ -144,6 +144,83 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
                 'restore' => true,
                 'force_delete' => true,
                 'visibility' => true,
+            ],
+            'categories' => [
+                'view' => true,
+                'create' => true,
+                'edit' => true,
+                'delete' => true,
+                'restore' => true,
+                'force_delete' => true,
+            ],
+            'portfolios' => [
+                'view' => true,
+                'create' => true,
+                'edit' => true,
+                'delete' => true,
+                'restore' => true,
+                'force_delete' => true,
+            ],
+            'services' => [
+                'view' => true,
+                'create' => true,
+                'edit' => true,
+                'delete' => true,
+                'restore' => true,
+                'force_delete' => true,
+            ],
+            'testimonials' => [
+                'view' => true,
+                'create' => true,
+                'edit' => true,
+                'delete' => true,
+                'restore' => true,
+                'force_delete' => true,
+            ],
+            'departments' => [
+                'view' => true,
+                'create' => true,
+                'edit' => true,
+                'delete' => true,
+                'restore' => true,
+                'force_delete' => true,
+                'visibility' => true,
+            ],
+            'pricings' => [
+                'view' => true,
+                'create' => true,
+                'edit' => true,
+                'delete' => true,
+                'restore' => true,
+                'force_delete' => true,
+                'visibility' => true,
+            ],
+            'doctors' => [
+                'view' => true,
+                'create' => true,
+                'edit' => true,
+                'delete' => true,
+                'restore' => true,
+                'force_delete' => true,
+                'toggleHome' => true,
+                'workingHours' => true,
+            ],
+            'blogs' => [
+                'view_all' => true,
+                'view_self' => true,
+                'create' => true,
+                'edit_all' => true,
+                'edit_self' => true,
+                'delete_all' => true,
+                'delete_self' => true,
+                'restore_all' => true,
+                'restore_self' => true,
+                'force_delete_all' => true,
+                'force_delete_self' => true,
+                'toggleHome_all' => true,
+                'toggleHome_self' => true,
+                'publish_all' => true,
+                'publish_self' => true,
             ],
         ];
     }
