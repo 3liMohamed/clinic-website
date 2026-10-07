@@ -2,41 +2,53 @@
 
 namespace App\Filament\Pages;
 
+use App\Enums\WorkingDay;
 use App\Models\Setting;
 use App\Rules\ValidOrHash;
 use App\Services\SettingService;
 use BackedEnum;
 use Filament\Enums\ThemeMode;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Repeater\TableColumn;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Pages\Page;
-use Filament\Schemas\Schema;
+use Filament\Forms\Components\TimePicker;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
+use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\Alignment;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
 class Settings extends Page
 {
-    use InteractsWithForms, AuthorizesRequests;
+    use AuthorizesRequests, InteractsWithForms;
 
     protected string $view = 'filament.pages.settings';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
 
-
     public static function getNavigationLabel(): string
     {
         return __('system.settings.navigation');
     }
+
     public function getHeading(): string
     {
         return __('system.settings.model');
     }
+
     public static function getNavigationGroup(): string
     {
         return __('system.settings.group');
@@ -47,7 +59,7 @@ class Settings extends Page
         return Auth::user()?->can('viewAny', Setting::class) ?? false;
     }
 
-    public static function canEdit(): bool
+    public function canEdit(): bool
     {
         return Auth::user()?->can('updateAny', Setting::class) ?? false;
     }
@@ -59,7 +71,24 @@ class Settings extends Page
     public function mount(SettingService $settingService): void
     {
         $this->authorize('viewAny', Setting::class);
+
         $this->originalData = $settingService->getAll();
+
+        $workingDays = $this->originalData['working_days'] ?? null;
+
+        if (is_string($workingDays)) {
+            $workingDays = json_decode($workingDays, true);
+        }
+
+        $this->originalData['working_days'] = $workingDays ?: collect(WorkingDay::cases())
+            ->map(fn (WorkingDay $day) => [
+                'day' => $day->value,
+                'is_visible' => false,
+                'start_time' => null,
+                'end_time' => null,
+                'total' => null,
+            ])
+            ->toArray();
 
         $this->form->fill($this->originalData);
     }
@@ -67,6 +96,7 @@ class Settings extends Page
     public function save(SettingService $settingService): void
     {
         $this->authorize('updateAny', Setting::class);
+
         $data = $this->form->getState();
 
         foreach ($data as $key => $value) {
@@ -74,6 +104,7 @@ class Settings extends Page
                 $settingService->set($key, $value);
             }
         }
+
         Notification::make()
             ->success()
             ->title(__('system.settings.saved'))
@@ -87,9 +118,8 @@ class Settings extends Page
             ->components([
                 Section::make('settings')
                     ->heading(__('system.settings.title'))
-                    ->disabled(fn(): bool => ! static::canEdit())
+                    ->disabled(fn (): bool => ! $this->canEdit())
                     ->schema([
-
                         TextInput::make('site:name')
                             ->required()
                             ->maxLength(99)
@@ -148,7 +178,10 @@ class Settings extends Page
 
                         Select::make('appearance:color')
                             ->required()
-                            ->options(array_combine(array_map('ucfirst', array_keys(Color::all())), array_map('ucfirst', array_keys(Color::all()))))
+                            ->options(array_combine(
+                                array_map('ucfirst', array_keys(Color::all())),
+                                array_map('ucfirst', array_keys(Color::all()))
+                            ))
                             ->selectablePlaceholder(false)
                             ->native(false)
                             ->searchable()
@@ -173,7 +206,6 @@ class Settings extends Page
                             ->required()
                             ->columnSpan(4)
                             ->label(__('system.field.address')),
-
 
                         TextInput::make('social:facebook')
                             ->required()
@@ -201,6 +233,113 @@ class Settings extends Page
                     ])
                     ->columns(12)
                     ->columnSpanFull(),
+
+                $this->sectionWorkingDays(),
             ]);
+    }
+
+    private function sectionWorkingDays(): Section
+    {
+        return Section::make('working-days')
+            ->disabled(fn (): bool => ! $this->canEdit())
+            ->heading(__('settings.working_days.title'))
+            ->description(__('settings.working_days.description'))
+            ->schema([
+                Repeater::make('working_days')
+                    ->table([
+                        TableColumn::make(__('system.field.day'))
+                            ->width('125px'),
+
+                        TableColumn::make(__('system.field.is_visible'))
+                            ->width('0px'),
+
+                        TableColumn::make(__('system.field.start_time'))
+                            ->width('150px'),
+
+                        TableColumn::make(__('system.field.end_time'))
+                            ->width('150px'),
+
+                        TableColumn::make(__('system.field.total'))
+                            ->width('150px'),
+                    ])
+                    ->schema([
+                        Hidden::make('day'),
+
+                        TextEntry::make('day_view')
+                            ->statePath('day')
+                            ->formatStateUsing(fn ($state) => WorkingDay::from($state)->getLabel())
+                            ->color(fn ($state) => WorkingDay::from($state)->getColor())
+                            ->size(TextSize::Large)
+                            ->alignment(Alignment::Center)
+                            ->badge()
+                            ->icon('heroicon-o-clock')
+                            ->columnSpan(2),
+
+                        Toggle::make('is_visible')
+                            ->inline(false)
+                            ->live()
+                            ->onIcon(Heroicon::Eye)
+                            ->offIcon(Heroicon::EyeSlash)
+                            ->columnSpan(2)
+                            ->label(__('system.field.is_visible')),
+
+                        TimePicker::make('start_time')
+                            ->seconds(false)
+                            ->displayFormat('H:i')
+                            ->live()
+                            ->required(fn (Get $get): bool => (bool) $get('is_visible'))
+                            ->disabled(fn (Get $get): bool => ! $get('is_visible'))
+                            ->dehydrated()
+                            ->afterStateUpdated(fn (Set $set, Get $get) => $set('total', $this->calculateDuration($get('start_time'), $get('end_time'))))
+                            ->columnSpan(3)
+                            ->label(__('system.field.start_time')),
+
+                        TimePicker::make('end_time')
+                            ->seconds(false)
+                            ->displayFormat('H:i')
+                            ->live()
+                            ->required(fn (Get $get): bool => (bool) $get('is_visible'))
+                            ->disabled(fn (Get $get): bool => ! $get('is_visible'))
+                            ->dehydrated()
+                            ->afterStateUpdated(fn (Set $set, Get $get) => $set('total', $this->calculateDuration($get('start_time'), $get('end_time'))))
+                            ->columnSpan(3)
+                            ->label(__('system.field.end_time')),
+
+                        TextInput::make('total')
+                            ->disabled()
+                            ->dehydrated()
+                            ->columnSpan(3)
+                            ->label(__('system.field.total')),
+                    ])
+                    ->addable(false)
+                    ->deletable(false)
+                    ->reorderable(false)
+                    ->hiddenLabel()
+                    ->columns(12)
+                    ->columnSpanFull(),
+            ])
+            ->columns(12)
+            ->columnSpanFull();
+    }
+
+    private function calculateDuration(?string $start, ?string $end): ?string
+    {
+        if (! $start || ! $end) {
+            return null;
+        }
+
+        $startTime = strtotime($start);
+        $endTime = strtotime($end);
+
+        $diff = $endTime - $startTime;
+
+        if ($diff < 0) {
+            $diff += 86400;
+        }
+
+        $hours = floor($diff / 3600);
+        $minutes = floor(($diff % 3600) / 60);
+
+        return "{$hours}h {$minutes}m";
     }
 }

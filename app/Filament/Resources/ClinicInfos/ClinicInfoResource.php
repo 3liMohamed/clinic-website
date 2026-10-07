@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ClinicInfos;
 
+use App\Filament\Actions\ToggleBoolean;
 use App\Filament\Forms\Components\IconSelect;
 use App\Filament\Resources\ClinicInfos\Pages\ManageClinicInfos;
 use App\Models\ClinicInfo;
@@ -129,29 +130,13 @@ class ClinicInfoResource extends Resource
                 CreateAction::make(),
             ])
             ->recordActions([
-                Action::make('toggleVisibility')
-                    ->authorize(fn(ClinicInfo $record) => auth()->user()->can('toggleVisibility', $record))
-                    ->label(fn(ClinicInfo $record) => $record->is_visible ? __('system.action.hide') : __('system.action.show'))
-                    ->icon(fn(ClinicInfo $record) => $record->is_visible ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
-                    ->color(fn(ClinicInfo $record) => $record->is_visible ? 'danger' : 'success')
-                    ->action(function (ClinicInfo $record, ClinicInfoService $clinicInfoService) {
+                ToggleBoolean::make()
+                    ->field('is_visible')
+                    ->service(ClinicInfoService::class)
+                    ->method('toggleVisibility')
+                    ->maxMethod('maxVisible')
+                    ->policyAbility('toggleVisibility'),
 
-                        $success = $clinicInfoService->toggleVisibility($record, ! $record->is_visible);
-
-                        if (! $success) {
-                            Notification::make()
-                                ->title(__('validation.max_visible', ['max' => $clinicInfoService->maxVisible()]))
-                                ->danger()
-                                ->send();
-
-                            return;
-                        }
-
-                        Notification::make()
-                            ->title(__('system.notification.updated'))
-                            ->success()
-                            ->send();
-                    }),
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Categories;
 
 use App\Filament\Resources\Categories\Pages\ManageCategories;
+use App\Filament\Resources\Faqs\FaqResource;
 use App\Filament\Resources\Portfolios\PortfolioResource;
 use App\Models\Category;
 use BackedEnum;
@@ -106,7 +107,20 @@ class CategoryResource extends Resource
                         PortfolioResource::getUrl('index', [
                             'filters' => [
                                 'category' => [
-                                    'value' => $record->getKey(),
+                                    'values' => [$record->getKey()],
+                                ],
+                            ],
+                        ])
+                    ),
+                Action::make('faqs')
+                    ->label(__('system.action.faqs'))
+                    ->icon(Heroicon::OutlinedQuestionMarkCircle)
+                    ->url(
+                        fn(Category $record): string =>
+                        FaqResource::getUrl('index', [
+                            'filters' => [
+                                'category' => [
+                                    'values' => [$record->getKey()],
                                 ],
                             ],
                         ])

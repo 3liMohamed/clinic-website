@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Services\DepartmentService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,13 +29,6 @@ class DepartmentItem extends Model
         return [
             'order' => 'integer',
         ];
-    }
-
-    protected static function booted(): void
-    {
-        static::saved(fn() => app(DepartmentService::class)->flush());
-        static::deleted(fn() => app(DepartmentService::class)->flush());
-        static::restored(fn() => app(DepartmentService::class)->flush());
     }
 
     public function scopeOrdered(Builder $query): Builder

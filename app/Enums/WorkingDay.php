@@ -16,7 +16,7 @@ enum WorkingDay: int implements HasColor, HasIcon, HasLabel
     case THURSDAY = 5;
     case FRIDAY = 6;
 
-     public function getLabel(): string
+    public function getLabel(): string
     {
         return match ($this) {
             self::SATURDAY => __('system.days.saturday'),
@@ -31,7 +31,15 @@ enum WorkingDay: int implements HasColor, HasIcon, HasLabel
 
     public function getColor(): string
     {
-        return 'gray';
+        return match ($this) {
+            self::SATURDAY => 'blue',
+            self::SUNDAY => 'cyan',
+            self::MONDAY => 'green',
+            self::TUESDAY => 'amber',
+            self::WEDNESDAY => 'red',
+            self::THURSDAY => 'violet',
+            self::FRIDAY => 'indigo',
+        };
     }
 
     public function getIcon(): string

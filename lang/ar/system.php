@@ -14,6 +14,7 @@ return [
         'add_working_hour' => 'add_working_hour',
         'publish' => 'publish',
         'unpublish' => 'unpublish',
+        'faqs' => 'faqs',
     ],
     'field' => [
         'active' => 'نشط',
@@ -132,6 +133,9 @@ return [
         'working_hours' => 'working_hours',
         'content_info' => 'content_info',
         'published_at' => 'published_at',
+        'total' => 'total',
+        'answer' => 'answer',
+        'question' => 'question',
     ],
     'user' => [
         'model' => 'مستخدم',
@@ -245,6 +249,49 @@ return [
         'enable_all' => 'enable_all',
     ],
     'blog' => [
+        'model' => 'model',
+        'navigation' => 'navigation',
+    ],
+    'about_us' => [
+        'model' => 'model',
+        'navigation' => 'navigation',
+    ],
+    'message' => [
+        'confirm_hide' => 'confirm_hide',
+        'confirm_publish' => 'confirm_publish',
+        'confirm_show' => 'confirm_show',
+        'confirm_unpublish' => 'confirm_unpublish',
+    ],
+    'mission' => [
+        'model' => 'model',
+        'navigation' => 'navigation',
+    ],
+    'vision' => [
+        'model' => 'model',
+        'navigation' => 'navigation',
+    ],
+    'client' => [
+        'model' => 'model',
+        'navigation' => 'navigation',
+    ],
+    'faq' => [
+        'model' => 'model',
+        'navigation' => 'navigation',
+    ],
+    'fields' => [
+        'email' => 'email',
+        'read_at' => 'read_at',
+        'status' => 'status',
+        'subscribed_at' => 'subscribed_at',
+    ],
+    'inquiries' => [
+        'group' => 'group',
+    ],
+    'status' => [
+        'read' => 'read',
+        'unread' => 'unread',
+    ],
+    'subscriber' => [
         'model' => 'model',
         'navigation' => 'navigation',
     ],

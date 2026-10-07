@@ -64,8 +64,11 @@ class Portfolio extends Model
             ->where('is_visible', true)
             ->where(function (Builder $query) {
                 $query
-                    ->where('has_detail_page', false)
-                    ->orWhereHas('category', fn(Builder $query) => $query->visible());
+                    ->whereDoesntHave('category')
+                    ->orWhereHas(
+                        'category',
+                        fn(Builder $query) => $query->visible()
+                    );
             });
     }
 

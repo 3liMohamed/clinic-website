@@ -3,17 +3,15 @@
 namespace App\Filament\Forms\Components;
 
 use Filament\Forms\Components\Select;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class IconSelect extends Select
 {
-
     protected function setUp(): void
     {
         parent::setUp();
-
-
 
         $this->native(false);
         $this->searchable();
@@ -27,7 +25,7 @@ class IconSelect extends Select
     public function getIcons(): array
     {
         return collect($this->availableIcons())
-            ->mapWithKeys(fn(string $label, string $class) => [
+            ->mapWithKeys(fn (string $label, string $class) => [
                 $class => $this->renderOption($class, $label),
             ])
             ->toArray();
@@ -50,8 +48,7 @@ class IconSelect extends Select
         return $this->extractIcofontIcons()
             ->merge($this->extractFontAwesomeIcons())
             ->filter(
-                fn(string $label, string $class) =>
-                collect($keywords)->contains(fn($keyword) => str_contains($class, $keyword))
+                fn (string $label, string $class) => collect($keywords)->contains(fn ($keyword) => str_contains($class, $keyword))
             )
             ->toArray();
     }
@@ -59,6 +56,8 @@ class IconSelect extends Select
     protected function clinicRelevantKeywords(): array
     {
         return [
+            'kid',
+            'tick',
             'ui',
             'listening',
             'smile',
@@ -239,7 +238,7 @@ class IconSelect extends Select
         ];
     }
 
-    protected function extractIcofontIcons(): \Illuminate\Support\Collection
+    protected function extractIcofontIcons(): Collection
     {
         $path = public_path('assets/css/icofont.css');
 
@@ -251,12 +250,12 @@ class IconSelect extends Select
 
         return collect($matches[1])
             ->unique()
-            ->mapWithKeys(fn(string $name) => [
+            ->mapWithKeys(fn (string $name) => [
                 "icofont-{$name}" => Str::headline($name),
             ]);
     }
 
-    protected function extractFontAwesomeIcons(): \Illuminate\Support\Collection
+    protected function extractFontAwesomeIcons(): Collection
     {
         $path = public_path('assets/css/font-awesome.min.css');
 
@@ -270,8 +269,8 @@ class IconSelect extends Select
 
         return collect($matches[1])
             ->unique()
-            ->reject(fn(string $name) => in_array($name, $utilityClasses))
-            ->mapWithKeys(fn(string $name) => [
+            ->reject(fn (string $name) => in_array($name, $utilityClasses))
+            ->mapWithKeys(fn (string $name) => [
                 "fa fa-{$name}" => Str::headline($name),
             ]);
     }

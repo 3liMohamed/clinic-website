@@ -25,6 +25,7 @@ class Service extends Model
         'content',
         'meta_keywords',
         'meta_description',
+        'is_home',
         'has_detail_page',
         'is_visible',
         'order',
@@ -33,6 +34,7 @@ class Service extends Model
     protected function casts(): array
     {
         return [
+            'is_home' => 'boolean',
             'has_detail_page' => 'boolean',
             'is_visible' => 'boolean',
             'order' => 'integer',

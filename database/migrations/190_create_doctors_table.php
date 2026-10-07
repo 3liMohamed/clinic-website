@@ -39,17 +39,18 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\Doctor::class)->constrained()->cascadeOnDelete();
 
             $table->unsignedTinyInteger('day')->default(0);
-            $table->time('start_time');
-            $table->time('end_time');
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
 
             $table->boolean('is_visible')->default(false);
 
-            $table->softDeletes();
+            $table->unique(['doctor_id', 'day']);
         });
     }
 
     public function down(): void
     {
+        Schema::dropIfExists('doctor_working_hours');
         Schema::dropIfExists('doctors');
     }
 };

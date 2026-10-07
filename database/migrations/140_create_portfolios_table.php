@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('portfolios', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Category::class)->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Category::class)->nullable()->constrained()->cascadeOnDelete();
             $table->string('cover_image')->default('default.webp');
             $table->json('gallery')->nullable();
             $table->json('title');

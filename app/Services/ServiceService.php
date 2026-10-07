@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 class ServiceService extends BaseService implements HasDetails
 {
     protected const CACHE_KEY = 'services:all-visible';
+    protected const MAX_HOME = 6;
 
     public function __construct(
         protected DetailPageService $detailPageService,
@@ -47,6 +48,35 @@ class ServiceService extends BaseService implements HasDetails
                 ],
             ],
         );
+    }
+
+    public function toggleHome(Service $service, bool $visible): bool
+    {
+        if ($visible && $this->homeCount(excluding: $service) >= self::MAX_HOME) {
+            return false;
+        }
+
+        $service->update(['is_home' => $visible]);
+
+        return true;
+    }
+
+    public function homeCount(?Service $excluding = null): int
+    {
+        return $this->allVisible()
+            ->where('is_home', true)
+            ->when(
+                $excluding,
+                fn($collection) => $collection->reject(
+                    fn(Service $item) => $item->is($excluding)
+                )
+            )
+            ->count();
+    }
+
+    public function maxHome(): int
+    {
+        return self::MAX_HOME;
     }
 
     protected function cacheKey(): string

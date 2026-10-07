@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Services\WhyChooseService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,13 +30,6 @@ class WhyChooseItem extends Model
     public array $translatable = [
         'title',
     ];
-
-    protected static function booted(): void
-    {
-        static::saved(fn() => app(WhyChooseService::class)->flush());
-        static::deleted(fn() => app(WhyChooseService::class)->flush());
-        static::restored(fn() => app(WhyChooseService::class)->flush());
-    }
 
     public function scopeOrdered(Builder $query): Builder
     {

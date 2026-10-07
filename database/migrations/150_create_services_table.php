@@ -17,6 +17,7 @@ return new class extends Migration
             $table->json('content')->nullable();
             $table->json('meta_keywords')->nullable();
             $table->json('meta_description')->nullable();
+            $table->boolean('is_home')->default(false);
             $table->boolean('has_detail_page')->default(true);
             $table->boolean('is_visible')->default(false);
             $table->unsignedInteger('order')->default(0);

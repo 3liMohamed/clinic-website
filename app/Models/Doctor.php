@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\WorkingDay;
 use App\Services\DoctorService;
 use App\Traits\HasAuditLog;
 use Illuminate\Database\Eloquent\Builder;
@@ -57,6 +58,18 @@ class Doctor extends Model
     protected static function booted(): void
     {
         static::saved(fn() => app(DoctorService::class)->flush());
+        static::created(function (Doctor $doctor) {
+            $doctor->workingHours()->createMany(
+                collect(WorkingDay::cases())
+                    ->map(fn(WorkingDay $day) => [
+                        'day' => $day->value,
+                        'start_time' => null,
+                        'end_time' => null,
+                        'is_visible' => false,
+                    ])
+                    ->toArray()
+            );
+        });
         static::deleted(function (self $doctor) {
             $doctor->workingHours()->delete();
 
@@ -98,6 +111,11 @@ class Doctor extends Model
     public function workingHours(): HasMany
     {
         return $this->hasMany(DoctorWorkingHour::class);
+    }
+
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
     }
 
     public function getSlugAttribute(): ?string

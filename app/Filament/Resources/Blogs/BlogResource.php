@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Blogs;
 
+use App\Filament\Actions\ToggleBoolean;
 use App\Filament\Actions\ToggleHome;
 use App\Filament\Resources\Blogs\Pages\ManageBlogs;
 use App\Models\Blog;
@@ -16,7 +17,6 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\ReplicateAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
@@ -222,9 +222,12 @@ class BlogResource extends Resource
                 TrashedFilter::make(),
             ])
             ->recordActions([
-                ToggleHome::make()
+                ToggleBoolean::make()
+                    ->field('is_home')
                     ->service(BlogService::class)
-                    ->visibleWhen(fn (Blog $record): bool => $record->is_visible && $record->published_at)
+                    ->visibleWhen(fn(Blog $record): bool => $record->is_visible && $record->published_at)
+                    ->method('toggleHome')
+                    ->maxMethod('maxHome')
                     ->policyAbility('toggleHome'),
 
                 Action::make('publish')

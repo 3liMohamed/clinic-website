@@ -8,19 +8,22 @@ use Illuminate\Support\Facades\DB;
 
 class WhyChooseService extends BaseService
 {
-    protected const CACHE_KEY = 'why-choose:visible-with-items';
+    protected const CACHE_KEY = 'why-choose:visible';
 
     public function visible(): ?WhyChoose
     {
         return Cache::rememberForever(self::CACHE_KEY, function () {
             return WhyChoose::query()
                 ->visible()
-                ->with('items')
+                ->with([
+                    'items' => fn($query) => $query
+                        ->ordered(),
+                ])
                 ->first();
         });
     }
 
-    public function toggleVisibility(WhyChoose $whyChoose, bool $visible): bool
+    public function makeVisible(WhyChoose $whyChoose, bool $visible): bool
     {
         DB::transaction(function () use ($whyChoose, $visible) {
             if ($visible) {

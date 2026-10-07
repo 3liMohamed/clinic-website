@@ -3,15 +3,16 @@
 namespace App\Filament\Resources\Doctors;
 
 use App\Enums\WorkingDay;
+use App\Filament\Actions\ToggleBoolean;
 use App\Filament\Actions\ToggleHome;
 use App\Filament\Forms\Components\IconSelect;
 use App\Filament\Resources\Doctors\Pages\ManageDoctors;
 use App\Models\Doctor;
 use App\Rules\ValidOrHash;
 use App\Services\DoctorService;
+use App\Services\SettingService;
 use BackedEnum;
 use Carbon\Carbon;
-use Closure;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
@@ -21,12 +22,13 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\ReplicateAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Repeater\TableColumn;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
@@ -34,13 +36,17 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Toggle;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\Alignment;
+use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
@@ -269,103 +275,178 @@ class DoctorResource extends Resource
             ])
             ->recordActions([
                 Action::make('workingHours')
-                    ->visible(fn(Doctor $record): bool => $record->is_visible && $record->has_detail_page)
-                    ->authorize(fn(Doctor $record): bool => auth()->user()->can('workingHours', $record))
+                    ->visible(
+                        fn(Doctor $record): bool =>
+                        $record->is_visible && $record->has_detail_page
+                    )
+                    ->authorize(
+                        fn(Doctor $record): bool =>
+                        auth()->user()->can('workingHours', $record)
+                    )
                     ->icon('heroicon-o-clock')
                     ->iconButton()
                     ->color('gray')
-                    ->fillForm(fn(Doctor $record): array => [
-                        'working_hours' => $record->workingHours()
-                            ->orderBy('day')
-                            ->get()
-                            ->map(fn($hour) => [
-                                'id' => $hour->id,
-                                'day' => $hour->day->value,
-                                'start_time' => $hour->start_time,
-                                'end_time' => $hour->end_time,
-                                'is_visible' => $hour->is_visible,
-                            ])
-                            ->toArray(),
-                    ])
+                    ->fillForm(
+                        fn(Doctor $record): array => [
+                            'working_hours' => $record->workingHours()
+                                ->orderBy('day')
+                                ->get()
+                                ->map(fn($hour) => [
+                                    'id' => $hour->id,
+                                    'day' => $hour->day->value,
+                                    'start_time' => $hour->start_time,
+                                    'end_time' => $hour->end_time,
+                                    'is_visible' => $hour->is_visible,
+                                ])
+                                ->toArray(),
+                        ]
+                    )
                     ->schema([
                         Repeater::make('working_hours')
+                            ->table([
+                                TableColumn::make(__('system.field.day'))
+                                    ->width('125px'),
+
+                                TableColumn::make(__('system.field.is_visible'))
+                                    ->width('0px'),
+
+                                TableColumn::make(__('system.field.start_time'))
+                                    ->width('150px'),
+
+                                TableColumn::make(__('system.field.end_time'))
+                                    ->width('150px'),
+                            ])
                             ->schema([
-                                Select::make('day')
-                                    ->options(WorkingDay::class)
-                                    ->required()
-                                    ->native(false)
-                                    ->distinct()
-                                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                                    ->columnSpan(4)
-                                    ->label(__('system.field.day')),
+                                Hidden::make('id'),
+
+                                Hidden::make('day'),
+
+                                TextEntry::make('day_view')
+                                    ->statePath('day')
+                                    ->formatStateUsing(fn($state) => WorkingDay::from($state)->getLabel())
+                                    ->color(fn($state) => WorkingDay::from($state)->getColor())
+                                    ->size(TextSize::Large)
+                                    ->alignment(Alignment::Center)
+                                    ->badge()
+                                    ->icon('heroicon-o-clock')
+                                    ->columnSpan(2),
+
+                                Toggle::make('is_visible')
+                                    ->inline(false)
+                                    ->live()
+                                    ->disabled(function (Get $get): bool {
+                                        $workingDays = app(SettingService::class)->get('working_days');
+                                        $workingDays = json_decode($workingDays, true);
+
+                                        $settingsDay = collect($workingDays)->firstWhere('day', $get('day'));
+
+                                        return ! ($settingsDay['is_visible'] ?? false);
+                                    })
+                                    ->dehydrated()
+                                    ->onIcon(Heroicon::Eye)
+                                    ->offIcon(Heroicon::EyeSlash)
+                                    ->columnSpan(2)
+                                    ->label(__('system.field.is_visible')),
 
                                 TimePicker::make('start_time')
-                                    ->required()
-                                    ->seconds(false)
-                                    ->displayFormat('g:i A')
-                                    ->format('g:i A')
-                                    ->live()
-                                    ->columnSpan(3)
-                                    ->label(__('system.field.start_time')),
-
-                                TimePicker::make('end_time')
-                                    ->required()
                                     ->seconds(false)
                                     ->displayFormat('g:i A')
                                     ->format('H:i')
                                     ->live()
+                                    ->required(fn(Get $get): bool => $get->boolean('is_visible'))
+                                    ->disabled(fn(Get $get): bool => ! $get->boolean('is_visible'))
+                                    ->dehydrated()
                                     ->rule(function (Get $get) {
                                         return function (string $attribute, $value, \Closure $fail) use ($get) {
-                                            $start = $get('start_time');
 
-                                            if (! $start || ! $value) {
+                                            if (! $value || $get('day') === null) {
                                                 return;
                                             }
 
-                                            $startTime = Carbon::parse($start);
+                                            $workingDays = app(SettingService::class)->get('working_days');
+
+                                            $workingDays = json_decode($workingDays, true);
+
+                                            $settingsDay = collect($workingDays)
+                                                ->firstWhere('day', $get('day'));
+
+                                            if (! $settingsDay || ! $settingsDay['is_visible']) {
+                                                return;
+                                            }
+
+                                            $startTime = Carbon::parse($value);
+
+                                            $settingsStartTime = Carbon::parse($settingsDay['start_time']);
+
+                                            if ($startTime->lt($settingsStartTime)) {
+                                                $fail(__('validation.start_time_outside_working_hours'));
+                                            }
+                                        };
+                                    })
+                                    ->columnSpan(3)
+                                    ->label(__('system.field.start_time')),
+
+                                TimePicker::make('end_time')
+                                    ->seconds(false)
+                                    ->displayFormat('g:i A')
+                                    ->format('H:i')
+                                    ->live()
+                                    ->required(fn(Get $get): bool => $get->boolean('is_visible'))
+                                    ->disabled(fn(Get $get): bool => ! $get->boolean('is_visible'))
+                                    ->dehydrated()
+                                    ->rule(function (Get $get) {
+                                        return function (string $attribute, $value, \Closure $fail) use ($get) {
+
+                                            if (! $value || $get('day') === null) {
+                                                return;
+                                            }
+
+                                            $workingDays = app(SettingService::class)->get('working_days');
+
+                                            $workingDays = json_decode($workingDays, true);
+
+                                            $settingsDay = collect($workingDays)
+                                                ->firstWhere('day', $get('day'));
+
+                                            if (! $settingsDay || ! $settingsDay['is_visible']) {
+                                                return;
+                                            }
+
+                                            $startTime = Carbon::parse($get('start_time'));
                                             $endTime = Carbon::parse($value);
 
-                                            if ($endTime->lessThanOrEqualTo($startTime)) {
+                                            $settingsStartTime = Carbon::parse($settingsDay['start_time']);
+                                            $settingsEndTime = Carbon::parse($settingsDay['end_time']);
+
+                                            if ($settingsEndTime->lessThanOrEqualTo($settingsStartTime)) {
+                                                $settingsEndTime->addDay();
+                                            }
+
+                                            if ($endTime->lessThan($startTime)) {
                                                 $endTime->addDay();
                                             }
 
-                                            $hours = $startTime->diffInMinutes($endTime) / 60;
-
-                                            if ($hours > 12) {
-                                                $fail(__('validation.max_working_hours'));
+                                            if ($endTime->gt($settingsEndTime)) {
+                                                $fail(__('validation.end_time_outside_working_hours'));
                                             }
                                         };
                                     })
                                     ->columnSpan(3)
                                     ->label(__('system.field.end_time')),
-
-                                Toggle::make('is_visible')
-                                    ->default(true)
-                                    ->onColor('success')
-                                    ->offColor('danger')
-                                    ->inline(false)
-                                    ->columnSpan(2)
-                                    ->label(__('system.field.is_visible')),
                             ])
-                            ->columns(12)
-                            ->defaultItems(0)
-                            ->addActionLabel(__('system.action.add_working_hour'))
+                            ->addable(false)
+                            ->deletable(false)
                             ->reorderable(false)
+                            ->hiddenLabel()
+                            ->columns(12)
                             ->columnSpanFull(),
                     ])
                     ->action(function (Doctor $record, array $data): void {
-                        $incomingIds = collect($data['working_hours'])
-                            ->pluck('id')
-                            ->filter()
-                            ->toArray();
-
-                        $record->workingHours()
-                            ->whereNotIn('id', $incomingIds)
-                            ->delete();
-
                         foreach ($data['working_hours'] as $row) {
                             $record->workingHours()->updateOrCreate(
-                                ['id' => $row['id'] ?? null],
+                                [
+                                    'id' => $row['id'] ?? null,
+                                ],
                                 [
                                     'day' => $row['day'],
                                     'start_time' => $row['start_time'],
@@ -383,9 +464,12 @@ class DoctorResource extends Resource
                             ->send();
                     }),
 
-                ToggleHome::make()
+                ToggleBoolean::make()
+                    ->field('is_home')
                     ->service(DoctorService::class)
-                    ->visibleWhen(fn (Doctor $record): bool => $record->is_visible)
+                    ->visibleWhen(fn(Doctor $record): bool => $record->is_visible)
+                    ->method('toggleHome')
+                    ->maxMethod('maxHome')
                     ->policyAbility('toggleHome'),
 
                 ActionGroup::make([

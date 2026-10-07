@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Services;
 
+use App\Filament\Actions\ToggleBoolean;
+use App\Filament\Actions\ToggleHome;
 use App\Filament\Forms\Components\IconSelect;
 use App\Filament\Resources\Services\Pages\ManageServices;
 use App\Filament\Tables\Columns\CustomIcon;
@@ -177,7 +179,7 @@ class ServiceResource extends Resource
             ->reorderable('order')
             ->defaultSort('order')
             ->recordTitleAttribute('title')
-            ->afterReordering(fn (array $order) => app(ServiceService::class)->flush())
+            ->afterReordering(fn(array $order) => app(ServiceService::class)->flush())
             ->columns([
                 ImageColumn::make('image')
                     ->disk('images')
@@ -209,7 +211,15 @@ class ServiceResource extends Resource
                 TrashedFilter::make(),
             ])
             ->recordActions([
-                 ActionGroup::make([
+                ToggleBoolean::make()
+                    ->field('is_home')
+                    ->service(ServiceService::class)
+                    ->visibleWhen(fn(Service $record): bool => $record->is_visible)
+                    ->method('toggleHome')
+                    ->maxMethod('maxHome')
+                    ->policyAbility('toggleHome'),
+
+                ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),
                     DeleteAction::make(),

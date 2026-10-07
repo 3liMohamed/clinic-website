@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\WhyChooses;
 
+use App\Filament\Actions\MakeVisible;
 use App\Filament\Resources\WhyChooses\Pages\ManageWhyChooses;
 use App\Models\WhyChoose;
 use App\Rules\ValidOrHash;
@@ -179,22 +180,10 @@ class WhyChooseResource extends Resource
                 CreateAction::make(),
             ])
             ->recordActions([
-                Action::make('toggleVisibility')
-                    ->authorize(fn(WhyChoose $record) => auth()->user()->can('toggleVisibility', $record))
-                    ->label(fn(WhyChoose $record) => $record->is_visible ? __('system.action.hide') : __('system.action.show'))
-                    ->icon(fn(WhyChoose $record) => $record->is_visible ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
-                    ->color(fn(WhyChoose $record) => $record->is_visible ? 'danger' : 'success')
-                    ->action(function (WhyChoose $record, WhyChooseService $whyChooseService) {
+                MakeVisible::make()
+                    ->service(WhyChooseService::class)
+                    ->policyAbility('visibility'),
 
-                        $success = $whyChooseService->toggleVisibility($record, ! $record->is_visible);
-
-                        if ($success) {
-                            Notification::make()
-                                ->title(__('system.notification.updated'))
-                                ->success()
-                                ->send();
-                        }
-                    }),
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),

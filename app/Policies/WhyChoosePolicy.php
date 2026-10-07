@@ -9,7 +9,7 @@ class WhyChoosePolicy extends BasePolicy
 {
     protected string $permission = 'why_chooses';
 
-    public function toggleVisibility(User $user, WhyChoose $whyChoose): bool
+    public function visibility(User $user, WhyChoose $whyChoose): bool
     {
         return $this->can($user, 'visibility');
     }

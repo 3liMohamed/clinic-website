@@ -20,6 +20,7 @@ class PortfolioService extends BaseService implements HasDetails
     {
         return Cache::rememberForever(self::CACHE_KEY, function () {
             return Portfolio::query()
+                ->with('category')
                 ->visible()
                 ->ordered()
                 ->get();

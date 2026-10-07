@@ -12,11 +12,11 @@ class DoctorPolicy extends BasePolicy
 
     public function toggleHome(User $user, Doctor $doctor): bool
     {
-        return $this->can($user, 'toggleHome');
+        return $this->can($user, 'toggle_home');
     }
 
     public function workingHours(User $user, Doctor $doctor): bool
     {
-        return $this->can($user, 'workingHours');
+        return $this->can($user, 'working_hours');
     }
 }

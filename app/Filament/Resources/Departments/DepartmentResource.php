@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Departments;
 
+use App\Filament\Actions\ToggleBoolean;
 use App\Filament\Forms\Components\IconSelect;
 use App\Filament\Resources\Departments\Pages\ManageDepartments;
 use App\Filament\Tables\Columns\CustomIcon;
@@ -146,29 +147,13 @@ class DepartmentResource extends Resource
                 TrashedFilter::make(),
             ])
             ->recordActions([
-                Action::make('toggleVisibility')
-                    ->authorize(fn(Department $record) => auth()->user()->can('toggleVisibility', $record))
-                    ->label(fn(Department $record) => $record->is_visible ? __('system.action.hide') : __('system.action.show'))
-                    ->icon(fn(Department $record) => $record->is_visible ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
-                    ->color(fn(Department $record) => $record->is_visible ? 'danger' : 'success')
-                    ->action(function (Department $record, DepartmentService $departmentService) {
+                ToggleBoolean::make()
+                    ->field('is_visible')
+                    ->service(DepartmentService::class)
+                    ->method('toggleVisibility')
+                    ->maxMethod('maxVisible')
+                    ->policyAbility('toggleVisibility'),
 
-                        $success = $departmentService->toggleVisibility($record, ! $record->is_visible);
-
-                        if (! $success) {
-                            Notification::make()
-                                ->title(__('validation.max_visible', ['max' => $departmentService->maxVisible()]))
-                                ->danger()
-                                ->send();
-
-                            return;
-                        }
-
-                        Notification::make()
-                            ->title(__('system.notification.updated'))
-                            ->success()
-                            ->send();
-                    }),
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),

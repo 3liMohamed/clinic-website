@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\CallActions;
 
+use App\Filament\Actions\MakeVisible;
+use App\Filament\Actions\ToggleBoolean;
 use App\Filament\Resources\CallActions\Pages\ManageCallActions;
 use App\Models\CallAction;
 use App\Models\User;
@@ -135,22 +137,11 @@ class CallActionResource extends Resource
                 CreateAction::make(),
             ])
             ->recordActions([
-                Action::make('toggleVisibility')
-                    ->authorize(fn(CallAction $record) => auth()->user()->can('toggleVisibility', $record))
-                    ->label(fn(CallAction $record) => $record->is_visible ? __('system.action.hide') : __('system.action.show'))
-                    ->icon(fn(CallAction $record) => $record->is_visible ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
-                    ->color(fn(CallAction $record) => $record->is_visible ? 'danger' : 'success')
-                    ->action(function (CallAction $record, CallActionService $callAction) {
 
-                        $success = $callAction->toggleVisibility($record, ! $record->is_visible);
+                MakeVisible::make()
+                    ->service(CallActionService::class)
+                    ->policyAbility('toggleVisibility'),
 
-                        if ($success) {
-                            Notification::make()
-                                ->title(__('system.notification.updated'))
-                                ->success()
-                                ->send();
-                        }
-                    }),
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),

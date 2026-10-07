@@ -106,28 +106,29 @@ class PortfolioResource extends Resource
 
                             Select::make('category_id')
                                 ->visible(fn(Get $get): bool => $get('has_detail_page'))
-                                ->relationship('category', 'name')
+                                ->relationship('category', 'name', fn(Builder $query) => $query->visible())
                                 ->searchable()
                                 ->preload()
-                                ->required()
                                 ->columnSpan(4)
                                 ->label(__('system.field.category')),
 
                             TextInput::make('client')
                                 ->visible(fn(Get $get): bool => $get('has_detail_page'))
+                                ->required(fn(Get $get): bool => $get('has_detail_page'))
                                 ->maxLength(255)
                                 ->columnSpan(4)
                                 ->label(__('system.field.client')),
 
                             DatePicker::make('project_date')
                                 ->visible(fn(Get $get): bool => $get('has_detail_page'))
+                                ->required(fn(Get $get): bool => $get('has_detail_page'))
                                 ->native(false)
                                 ->format('Y-m-d')
                                 ->columnSpan(4)
                                 ->label(__('system.field.project_date')),
 
                             RichEditor::make('content')
-                                ->required()
+                                ->required(fn(Get $get): bool => $get('has_detail_page'))
                                 ->visible(fn(Get $get): bool => $get('has_detail_page'))
                                 ->toolbarButtons([
                                     'bold',
@@ -166,6 +167,7 @@ class PortfolioResource extends Resource
                                 ->label(__('system.field.cover_image')),
 
                             FileUpload::make('gallery')
+                                ->required()
                                 ->image()
                                 ->multiple()
                                 ->imageEditor()
@@ -207,7 +209,7 @@ class PortfolioResource extends Resource
             ->reorderable('order')
             ->defaultSort('order')
             ->recordTitleAttribute('title')
-            ->afterReordering(fn (array $order) => app(PortfolioService::class)->flush())
+            ->afterReordering(fn(array $order) => app(PortfolioService::class)->flush())
             ->columns([
                 ImageColumn::make('cover_image')
                     ->disk('images')

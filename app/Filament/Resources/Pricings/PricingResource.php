@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Pricings;
 
 use App\Enums\PriceSuffix;
+use App\Filament\Actions\ToggleBoolean;
 use App\Filament\Forms\Components\IconSelect;
 use App\Filament\Resources\Pricings\Pages\ManagePricings;
 use App\Filament\Tables\Columns\CustomIcon;
@@ -172,29 +173,14 @@ class PricingResource extends Resource
                 TrashedFilter::make(),
             ])
             ->recordActions([
-                Action::make('toggleVisibility')
-                    ->authorize(fn(Pricing $record) => auth()->user()->can('toggleVisibility', $record))
-                    ->label(fn(Pricing $record) => $record->is_visible ? __('system.action.hide') : __('system.action.show'))
-                    ->icon(fn(Pricing $record) => $record->is_visible ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
-                    ->color(fn(Pricing $record) => $record->is_visible ? 'danger' : 'success')
-                    ->action(function (Pricing $record, PricingService $pricingService) {
 
-                        $success = $pricingService->toggleVisibility($record, ! $record->is_visible);
+                ToggleBoolean::make()
+                    ->field('is_visible')
+                    ->service(PricingService::class)
+                    ->method('toggleVisibility')
+                    ->maxMethod('maxVisible')
+                    ->policyAbility('toggleVisibility'),
 
-                        if (! $success) {
-                            Notification::make()
-                                ->title(__('validation.max_visible') . ' ' . $pricingService->maxVisible())
-                                ->danger()
-                                ->send();
-
-                            return;
-                        }
-
-                        Notification::make()
-                            ->title(__('system.notification.updated'))
-                            ->success()
-                            ->send();
-                    }),
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),

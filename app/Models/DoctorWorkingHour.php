@@ -3,15 +3,11 @@
 namespace App\Models;
 
 use App\Enums\WorkingDay;
-use App\Services\DoctorService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DoctorWorkingHour extends Model
 {
-    use SoftDeletes;
-
     public $timestamps = false;
 
     protected $fillable = [
@@ -30,13 +26,6 @@ class DoctorWorkingHour extends Model
             'end_time' => 'datetime:H:i',
             'is_visible' => 'boolean',
         ];
-    }
-
-    protected static function booted(): void
-    {
-        static::saved(fn() => app(DoctorService::class)->flush());
-        static::deleted(fn() => app(DoctorService::class)->flush());
-        static::restored(fn() => app(DoctorService::class)->flush());
     }
 
     public function doctor(): BelongsTo

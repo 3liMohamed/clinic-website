@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Features;
 
+use App\Filament\Actions\ToggleBoolean;
 use App\Filament\Forms\Components\IconSelect;
 use App\Filament\Resources\Features\Pages\ManageFeatures;
 use App\Filament\Tables\Columns\CustomIcon;
@@ -84,7 +85,7 @@ class FeatureResource extends Resource
             ->reorderable('order')
             ->defaultSort('order')
             ->recordTitleAttribute('title')
-            ->afterReordering(fn (array $order) => app(FeatureService::class)->flush())
+            ->afterReordering(fn(array $order) => app(FeatureService::class)->flush())
             ->columns([
                 CustomIcon::make('icon')
                     ->label(__('system.field.icon')),
@@ -106,29 +107,14 @@ class FeatureResource extends Resource
                 CreateAction::make(),
             ])
             ->recordActions([
-                Action::make('toggleVisibility')
-                    ->authorize(fn(Feature $record) => auth()->user()->can('toggleVisibility', $record))
-                    ->label(fn(Feature $record) => $record->is_visible ? __('system.action.hide') : __('system.action.show'))
-                    ->icon(fn(Feature $record) => $record->is_visible ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
-                    ->color(fn(Feature $record) => $record->is_visible ? 'danger' : 'success')
-                    ->action(function (Feature $record, FeatureService $featureService) {
 
-                        $success = $featureService->toggleVisibility($record, ! $record->is_visible);
+                ToggleBoolean::make()
+                    ->field('is_visible')
+                    ->service(FeatureService::class)
+                    ->method('toggleVisibility')
+                    ->maxMethod('maxVisible')
+                    ->policyAbility('toggleVisibility'),
 
-                        if (! $success) {
-                            Notification::make()
-                                ->title(__('validation.max_visible', ['max' => $featureService->maxVisible()]))
-                                ->danger()
-                                ->send();
-
-                            return;
-                        }
-
-                        Notification::make()
-                            ->title(__('system.notification.updated'))
-                            ->success()
-                            ->send();
-                    }),
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),

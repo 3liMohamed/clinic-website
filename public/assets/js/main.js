@@ -1,37 +1,4 @@
-/* =====================================
-Template Name: 	Mediplus.
-Author Name: Naimur Rahman
-Website: http://wpthemesgrid.com/
-Description: Mediplus - Doctor HTML Template.
-Version:	1.1
-========================================*/
-/*=======================================
-[Start Activation Code]
-=========================================
-* Sticky Header JS
-* Search JS
-* Mobile Menu JS
-* Hero Slider JS
-* Testimonial Slider JS
-* Portfolio Slider JS
-* Clients Slider JS
-* Single Portfolio Slider JS
-* Accordion JS
-* Nice Select JS
-* Date Picker JS
-* Counter Up JS
-* Checkbox JS
-* Right Bar JS
-* Video Popup JS
-* Wow JS
-* Scroll Up JS
-* Animate Scroll JS
-* Stellar JS
-* RTL Version JS
-* Preloader JS
-=========================================
-[End Activation Code]
-=========================================*/
+
 (function ($) {
     "use strict";
     $(document).on("ready", function () {
@@ -331,4 +298,88 @@ Version:	1.1
     $(window).on("load", function () {
         $(".preloader").addClass("preloader-deactivate");
     });
+
+    /*===============================
+            Forms AJAX
+        =================================*/
+
+    $("[data-form]").on("submit", function (e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const button = form.find('[type="submit"]');
+
+        clearErrors(form);
+
+        button.prop("disabled", true);
+
+        $.ajax({
+            url: form.attr("action"),
+            method: form.attr("method") || "POST",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            headers: {
+                Accept: "application/json",
+            },
+
+            success: function (response) {
+                form[0].reset();
+
+                const container = form.closest("[data-form-container]");
+                const content = container.find("[data-form-content]");
+                const success = container.find("[data-form-success]");
+
+                content.hide();
+                success.removeAttr("hidden");
+
+                setTimeout(function () {
+                    success.attr("hidden", true);
+                    content.show();
+
+                    clearErrors(form);
+
+                    form.find("[data-form-error]")
+                        .text("")
+                        .attr("hidden", true);
+                }, 5000);
+
+            },
+
+            error: function (xhr) {
+                if (xhr.status === 429) {
+                    form.find("[data-form-error]")
+                        .text(xhr.responseJSON?.message)
+                        .removeAttr("hidden");
+
+                    return;
+                }
+
+                if (xhr.status === 422) {
+                    showErrors(form, xhr.responseJSON.errors);
+
+                    return;
+                }
+
+                console.error(
+                    xhr.responseJSON?.message ?? "Something went wrong."
+                );
+            },
+
+            complete: function () {
+                button.prop("disabled", false);
+            },
+        });
+    });
+
+    function clearErrors(form) {
+        form.find("[data-error-for]").text("");
+    }
+
+    function showErrors(form, errors) {
+        $.each(errors, function (field, messages) {
+            form.find(`[data-error-for="${field}"]`).text(messages[0]);
+        });
+    }
 })(jQuery);
+

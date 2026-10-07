@@ -66,6 +66,14 @@ return [
                 'component' => 'sections.blogs',
                 'requires_entity' => false,
             ],
+            'clients' => [
+                'component' => 'sections.clients',
+                'requires_entity' => false,
+            ],
+            'appointment' => [
+                'component' => 'sections.appointment',
+                'requires_entity' => false,
+            ],
             'subscription' => [
                 'component' => 'sections.subscription',
                 'requires_entity' => false,
@@ -73,10 +81,25 @@ return [
         ],
     ],
 
-    'about' => [
+    'about-us' => [
         'route' => 'about',
         'sections' => [
-
+            'about us' => [
+                'component' => 'sections.about',
+                'requires_entity' => false,
+            ],
+            'visions' => [
+                'component' => 'sections.vision',
+                'requires_entity' => false,
+            ],
+            'mission' => [
+                'component' => 'sections.mission',
+                'requires_entity' => false,
+            ],
+            'subscription' => [
+                'component' => 'sections.subscription',
+                'requires_entity' => false,
+            ],
         ],
     ],
 
@@ -85,6 +108,23 @@ return [
         'sections' => [
             'doctors' => [
                 'component' => 'sections.doctors-page',
+                'requires_entity' => false,
+            ],
+            'subscription' => [
+                'component' => 'sections.subscription',
+                'requires_entity' => false,
+            ],
+        ],
+    ],
+    'services' => [
+        'route' => 'services',
+        'sections' => [
+            'services' => [
+                'component' => 'sections.services-page',
+                'requires_entity' => false,
+            ],
+            'clients' => [
+                'component' => 'sections.clients',
                 'requires_entity' => false,
             ],
             'subscription' => [
@@ -106,10 +146,18 @@ return [
             ],
         ],
     ],
-
-    'services' => [
-        'route' => 'services',
-        'sections' => [],
+    'faqs' => [
+        'route' => 'faqs',
+        'sections' => [
+            'faqs' => [
+                'component' => 'sections.faqs',
+                'requires_entity' => false,
+            ],
+            'subscription' => [
+                'component' => 'sections.subscription',
+                'requires_entity' => false,
+            ],
+        ],
     ],
 
     'contact' => [
@@ -117,10 +165,7 @@ return [
         'sections' => [],
     ],
 
-    'faq' => [
-        'route' => 'faq',
-        'sections' => [],
-    ],
+
 
     'portfolio details' => [
         'sections' => [

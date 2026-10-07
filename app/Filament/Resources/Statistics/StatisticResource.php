@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Statistics;
 
+use App\Filament\Actions\ToggleBoolean;
 use App\Filament\Forms\Components\IconSelect;
 use App\Filament\Resources\Statistics\Pages\ManageStatistics;
 use App\Filament\Tables\Columns\CustomIcon;
@@ -106,30 +107,14 @@ class StatisticResource extends Resource
                 CreateAction::make(),
             ])
             ->recordActions([
-                Action::make('toggleVisibility')
-                    ->authorize(fn(Statistic $record) => auth()->user()->can('toggleVisibility', $record))
-                    ->label(fn(Statistic $record) => $record->is_visible ? __('system.action.hide') : __('system.action.show'))
-                    ->icon(fn(Statistic $record) => $record->is_visible ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
-                    ->color(fn(Statistic $record) => $record->is_visible ? 'danger' : 'success')
-                    ->action(function (Statistic $record, StatisticService $statisticService) {
+                ToggleBoolean::make()
+                    ->field('is_visible')
+                    ->service(StatisticService::class)
+                    ->method('toggleVisibility')
+                    ->maxMethod('maxVisible')
+                    ->policyAbility('toggleVisibility'),
 
-                        $success = $statisticService->toggleVisibility($record, ! $record->is_visible);
-
-                        if (! $success) {
-                            Notification::make()
-                                ->title(__('validation.max_visible', ['max' => $statisticService->maxVisible()]))
-                                ->danger()
-                                ->send();
-
-                            return;
-                        }
-
-                        Notification::make()
-                            ->title(__('system.notification.updated'))
-                            ->success()
-                            ->send();
-                    }),
-                ActionGroup::make([
+                    ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),
                     DeleteAction::make(),

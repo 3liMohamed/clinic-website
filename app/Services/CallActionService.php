@@ -19,7 +19,7 @@ class CallActionService extends BaseService
         });
     }
 
-    public function toggleVisibility(CallAction $callAction, bool $visible): bool
+    public function makeVisible(CallAction $callAction, bool $visible): bool
     {
         DB::transaction(function () use ($callAction, $visible) {
             if ($visible) {
@@ -36,6 +36,7 @@ class CallActionService extends BaseService
 
         return true;
     }
+
 
 
     protected function cacheKey(): string

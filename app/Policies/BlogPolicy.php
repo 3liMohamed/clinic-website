@@ -47,7 +47,7 @@ class BlogPolicy extends BasePolicy
 
     public function toggleHome(User $user, Model $model): bool
     {
-        return $this->can($user, 'toggleHome_all') || ( $this->can($user, 'toggleHome_self') && $this->isOwner($user, $model));
+        return $this->can($user, 'toggle_home_all') || ( $this->can($user, 'toggle_home_self') && $this->isOwner($user, $model));
     }
 
     public function publish(User $user, Model $model): bool

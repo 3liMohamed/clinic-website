@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Services\PricingService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,16 +31,6 @@ class PricingFeature extends Model
             'is_available' => 'boolean',
             'order' => 'integer',
         ];
-    }
-
-    protected static function booted(): void
-    {
-        static::saved(fn () => app(PricingService::class)->flush());
-
-        static::deleted(fn () => app(PricingService::class)->flush());
-
-        static::restored(fn () => app(PricingService::class)->flush());
-
     }
 
     public function scopeOrdered(Builder $query): Builder

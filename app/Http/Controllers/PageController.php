@@ -14,7 +14,9 @@ class PageController extends Controller
     public function show(string $name): View
     {
         $page = $this->pageService->findMainByNameOrFail($name);
+
         $sections = $this->pageService->sections($page);
+
         return view("pages.main", compact('page', 'sections'));
     }
 }

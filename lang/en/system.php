@@ -14,6 +14,7 @@ return [
         'add_working_hour' => 'add_working_hour',
         'publish' => 'publish',
         'unpublish' => 'unpublish',
+        'faqs' => 'faqs',
     ],
     'field' => [
         'active' => 'Active',
@@ -132,6 +133,9 @@ return [
         'working_hours' => 'Working Hours',
         'content_info' => 'content_info',
         'published_at' => 'published_at',
+        'total' => 'total',
+        'answer' => 'answer',
+        'question' => 'question',
     ],
     'user' => [
         'model' => 'User',
@@ -240,12 +244,55 @@ return [
     ],
     'permissions' => [
         'disable' => 'disable',
-        'disable_all' => 'disable_all',
+        'disable_all' => 'disable all',
         'enable' => 'enable',
-        'enable_all' => 'enable_all',
+        'enable_all' => 'enable all',
     ],
     'blog' => [
         'model' => 'model',
         'navigation' => 'navigation',
+    ],
+    'about_us' => [
+        'model' => 'model',
+        'navigation' => 'navigation',
+    ],
+    'message' => [
+        'confirm_hide' => 'confirm hide',
+        'confirm_publish' => 'confirm publish',
+        'confirm_show' => 'confirm show',
+        'confirm_unpublish' => 'confirm unpublish',
+    ],
+    'mission' => [
+        'model' => 'model',
+        'navigation' => 'navigation',
+    ],
+    'vision' => [
+        'model' => 'model',
+        'navigation' => 'navigation',
+    ],
+    'client' => [
+        'model' => 'model',
+        'navigation' => 'navigation',
+    ],
+    'faq' => [
+        'model' => 'model',
+        'navigation' => 'navigation',
+    ],
+    'fields' => [
+        'email' => 'email',
+        'read_at' => 'read_at',
+        'status' => 'status',
+        'subscribed_at' => 'subscribed_at',
+    ],
+    'inquiries' => [
+        'group' => 'Inquiries',
+    ],
+    'status' => [
+        'read' => 'read',
+        'unread' => 'unread',
+    ],
+    'subscriber' => [
+        'model' => 'Subscriber',
+        'navigation' => 'Subscribers',
     ],
 ];

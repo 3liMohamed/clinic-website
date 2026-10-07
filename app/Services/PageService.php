@@ -59,7 +59,7 @@ class PageService extends BaseService
     {
         $page = $this->findMainByName($name);
 
-        abort_unless($page, 404);
+        $this->abortIfPageNotConfigured($page);
 
         return $page;
     }
@@ -80,7 +80,7 @@ class PageService extends BaseService
     {
         $page = $this->findDetailsByName($name);
 
-        abort_unless($page, 404);
+        $this->abortIfPageNotConfigured($page);
 
         return $page;
     }
@@ -112,6 +112,11 @@ class PageService extends BaseService
             ->filter()
             ->values()
             ->all();
+    }
+
+    protected function abortIfPageNotConfigured(?Page $page): void
+    {
+        abort_unless($page && config()->has("pages.{$page->name}"), 404);
     }
 
     protected function cacheKey(): string

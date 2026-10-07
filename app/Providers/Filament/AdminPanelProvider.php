@@ -92,6 +92,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
+                    ->label(fn() => __('system.inquiries.group'))
+                    ->icon(Heroicon::OutlinedInbox),
+
+                NavigationGroup::make()
                     ->label(fn() => __('system.settings.group'))
                     ->icon(Heroicon::OutlinedCog6Tooth),
             ])

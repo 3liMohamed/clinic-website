@@ -14,6 +14,10 @@ class SettingPolicy extends BasePolicy
         return $this->can($user, 'edit');
     }
 
+    public function view(User $user, Model $model): bool
+    {
+        return $this->can($user, 'view');
+    }
 
     public function create(User $user): bool
     {

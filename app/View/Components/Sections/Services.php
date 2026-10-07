@@ -17,7 +17,7 @@ class Services extends Component
 
     public function __construct(ServiceService $serviceService)
     {
-        $this->services = $serviceService->allVisible();
+        $this->services = $serviceService->allVisible()->where('is_home', true);
     }
 
     /**
