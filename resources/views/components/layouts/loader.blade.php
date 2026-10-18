@@ -13,3 +13,11 @@
         </div>
     </div>
     <!-- End Preloader -->
+
+    <!-- Mediplus Color Plate -->
+    <div class="color-plate">
+        <a href="{{ route('locale', app()->getLocale() === 'ar' ? 'en' : 'ar') }}" class="color-plate-icon"
+            aria-label="{{ app()->getLocale() === 'ar' ? 'Switch to English' : 'التبديل إلى العربية' }}"><i
+                class="fa fa-language"></i></a>
+    </div>
+    <!-- /End Color Plate -->

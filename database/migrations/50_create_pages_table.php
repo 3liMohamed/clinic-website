@@ -25,6 +25,7 @@ return new class extends Migration
             $table->boolean('show_in_main_nav')->default(true);
             $table->boolean('show_in_top_nav')->default(false);
             $table->boolean('is_cta')->default(false);
+            $table->boolean('show_in_footer')->default(false);
 
             $table->json('meta_keywords')->nullable();
             $table->json('meta_description')->nullable();

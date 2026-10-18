@@ -3,6 +3,26 @@
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
 
+@source "../../../../vendor/lara-zeus/filament-locationpickr-field/resources/views/**/*.blade.php";
+@source "../../../../vendor/lara-zeus/filament-locationpickr-field/resources/views/themes/**/*.blade.php";
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--primary-500);
+    border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--primary-600);
+}
+
+
 
 .footer {
     @apply fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 dark:text-gray-200 py-1 px-2 max-sm:px-0 shadow-lg z-30;
@@ -15,6 +35,9 @@
 
     & .footer-copyright {
         @apply mt-2 md:mt-0 text-gray-900 dark:text-gray-400;
+    }
+    & .footer-copyright strong {
+        @apply text-primary-600 dark:text-primary-400;
     }
 }
 

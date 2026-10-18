@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('appointments', function (Blueprint $table) {
+            $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('phone');
 
             $table->foreignIdFor(\App\Models\Doctor::class)->nullable()->constrained()->nullOnDelete();

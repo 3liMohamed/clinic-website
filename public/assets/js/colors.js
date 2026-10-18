@@ -51,7 +51,5 @@ $(document).ready(function () {
     return false;
   });
 
-  $(".color-plate .color-plate-icon").on("click", function () {
-    $(".color-plate").toggleClass("active");
-  });
+
 });

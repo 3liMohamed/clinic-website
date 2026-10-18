@@ -6,7 +6,7 @@
                 <div class="doctor-details-item doctor-details-left">
                     <img src="{{ $entity->image_url }}" alt="{{ $entity->name }}" />
                     <div class="doctor-details-contact">
-                        <h3>Contact info</h3>
+                        <h3>@t('sections', 'doctor.contact_info')</h3>
                         <ul class="basic-info">
                             @if ($entity->phone !== '#')
                                 <li>
@@ -46,7 +46,7 @@
                         </ul>
                         <!-- End Social -->
                         <div class="doctor-details-work">
-                            <h3>Working hours</h3>
+                            <h3>@t('sections', 'doctor.working_hours')</h3>
                             <ul class="time-sidual">
                                 @foreach ($entity->workingHours as $workingHour)
                                     <li class="day">

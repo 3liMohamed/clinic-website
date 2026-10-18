@@ -39,7 +39,9 @@ class SubscriberResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return (int) Subscriber::query()->whereNull('read_at')->count();
+        $count = (int) Subscriber::query()->whereNull('read_at')->count();
+
+        return $count > 0 ? (string) $count : null;
     }
 
     public static function getNavigationBadgeColor(): string
@@ -51,43 +53,29 @@ class SubscriberResource extends Resource
     {
         return $table
             ->recordTitleAttribute('email')
+            ->defaultSort('id', 'desc')
             ->columns([
                 TextColumn::make('email')
                     ->searchable()
                     ->sortable()
-                    ->label(__('system.fields.email')),
+                    ->label(__('system.field.email')),
 
                 TextColumn::make('subscribed_at')
                     ->dateTime()
                     ->sortable()
-                    ->label(__('system.fields.subscribed_at')),
+                    ->label(__('system.field.subscribed_at')),
 
                 TextColumn::make('read_at')
                     ->dateTime()
                     ->placeholder(__('system.status.unread'))
                     ->sortable()
-                    ->label(__('system.fields.read_at')),
+                    ->label(__('system.field.read_at')),
 
                 TextColumn::make('status')
-                    ->label(__('system.fields.status'))
                     ->state(fn(Subscriber $record): string => $record->read_at ?  __('system.status.read') : __('system.status.unread'))
                     ->badge()
-                    ->color(fn(Subscriber $record): string => $record->read_at ? 'success' : 'warning'),
-            ])
-            ->filters([
-                SelectFilter::make('read_at')
-                    ->options([
-                        'unread' => __('system.status.unread'),
-                        'read' => __('system.status.read'),
-                    ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return match ($data['value'] ?? null) {
-                            'unread' => $query->whereNull('read_at'),
-                            'read' => $query->whereNotNull('read_at'),
-                            default => $query,
-                        };
-                    })
-                    ->label(__('system.fields.status'))
+                    ->color(fn(Subscriber $record): string => $record->read_at ? 'success' : 'warning')
+                    ->label(__('system.field.status')),
             ])
             ->recordActions([
                 DeleteAction::make()->iconButton(),

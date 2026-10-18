@@ -270,6 +270,15 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
                 'view' => true,
                 'delete' => true,
             ],
+            'appointments' => [
+                'view' => true,
+                'delete' => true,
+                'set_appointment_date' => true,
+            ],
+            'contact_us' => [
+                'view' => true,
+                'delete' => true,
+            ],
         ];
     }
 }

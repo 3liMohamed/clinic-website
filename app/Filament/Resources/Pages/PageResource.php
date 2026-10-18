@@ -16,8 +16,8 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Utilities\Get;
@@ -49,6 +49,7 @@ class PageResource extends Resource
     {
         return __('system.page.navigation');
     }
+
     public static function getModelLabel(): string
     {
         return __('system.page.model');
@@ -75,7 +76,7 @@ class PageResource extends Resource
                                 ->directory('og')
                                 ->maxSize(2048)
                                 ->columnSpanFull()
-                                ->visible(fn(Get $get): bool => (int) $get('type')->value === PageType::Main->value)
+                                ->visible(fn (Get $get): bool => (int) $get('type')->value === PageType::Main->value)
                                 ->label(__('system.field.image')),
 
                             TextInput::make('name')
@@ -116,17 +117,17 @@ class PageResource extends Resource
                                 ->label(__('system.field.show_breadcrumb')),
 
                             TextInput::make('header_title')
-                                ->required(fn(Get $get): bool => (int) $get('type')->value === PageType::Main->value)
+                                ->required(fn (Get $get): bool => (int) $get('type')->value === PageType::Main->value)
                                 ->maxLength(255)
                                 ->columnSpan(6)
-                                ->visible(fn(Get $get): bool => (int) $get('type')->value === PageType::Main->value)
+                                ->visible(fn (Get $get): bool => (int) $get('type')->value === PageType::Main->value)
                                 ->label(__('system.field.header_title')),
 
                             TextInput::make('nav_title')
-                                ->required(fn(Get $get): bool => (int) $get('type')->value === PageType::Main->value)
+                                ->required(fn (Get $get): bool => (int) $get('type')->value === PageType::Main->value)
                                 ->maxLength(255)
                                 ->columnSpan(6)
-                                ->visible(fn(Get $get): bool => (int) $get('type')->value === PageType::Main->value)
+                                ->visible(fn (Get $get): bool => (int) $get('type')->value === PageType::Main->value)
                                 ->label(__('system.field.nav_title')),
 
                             Toggle::make('show_in_main_nav')
@@ -134,8 +135,8 @@ class PageResource extends Resource
                                 ->onColor('success')
                                 ->offColor('danger')
                                 ->inline(false)
-                                ->columnSpan(4)
-                                ->visible(fn(Get $get): bool => (int) $get('type')->value === PageType::Main->value)
+                                ->columnSpan(3)
+                                ->visible(fn (Get $get): bool => (int) $get('type')->value === PageType::Main->value)
                                 ->label(__('system.field.show_in_main_nav')),
 
                             Toggle::make('show_in_top_nav')
@@ -143,24 +144,33 @@ class PageResource extends Resource
                                 ->onColor('success')
                                 ->offColor('danger')
                                 ->inline(false)
-                                ->columnSpan(4)
-                                ->visible(fn(Get $get): bool => (int) $get('type')->value === PageType::Main->value)
+                                ->columnSpan(3)
+                                ->visible(fn (Get $get): bool => (int) $get('type')->value === PageType::Main->value)
                                 ->label(__('system.field.show_in_top_nav')),
+
+                            Toggle::make('show_in_footer')
+                                ->default(false)
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->inline(false)
+                                ->columnSpan(3)
+                                ->visible(fn (Get $get): bool => (int) $get('type')->value === PageType::Main->value)
+                                ->label(__('system.field.show_in_footer')),
 
                             Toggle::make('is_cta')
                                 ->default(false)
                                 ->onColor('success')
                                 ->offColor('danger')
                                 ->inline(false)
-                                ->columnSpan(4)
-                                ->visible(fn(Get $get): bool => (int) $get('type')->value === PageType::Main->value)
+                                ->columnSpan(3)
+                                ->visible(fn (Get $get): bool => (int) $get('type')->value === PageType::Main->value)
                                 ->label(__('system.field.is_cta')),
 
                         ])->columns(12),
 
                     Step::make(__('system.field.sections_meta'))
                         ->icon(Heroicon::GlobeAlt)
-                        ->visible(fn(Get $get): bool => (int) $get('type')->value === PageType::Main->value)
+                        ->visible(fn (Get $get): bool => (int) $get('type')->value === PageType::Main->value)
                         ->schema([
                             TagsInput::make('meta_keywords')
                                 ->required()
@@ -178,7 +188,7 @@ class PageResource extends Resource
 
                     Step::make(__('system.field.breadcrumb_info'))
                         ->icon(Heroicon::RectangleStack)
-                        ->visible(fn(Get $get): bool => (bool) $get('show_breadcrumb'))
+                        ->visible(fn (Get $get): bool => (bool) $get('show_breadcrumb'))
                         ->schema([
                             FileUpload::make('breadcrumb_image')
                                 ->image()
@@ -262,7 +272,7 @@ class PageResource extends Resource
             ->reorderable('order')
             ->defaultSort('order')
             ->recordTitleAttribute('name')
-            ->afterReordering(fn(array $order) => app(PageService::class)->flush())
+            ->afterReordering(fn (array $order) => app(PageService::class)->flush())
             ->columns([
                 ImageColumn::make('image')
                     ->disk('images')

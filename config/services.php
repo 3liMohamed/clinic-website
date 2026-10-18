@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'clinic' => [
+        'api_key' => env('CLINIC_API_KEY'),
+    ],
+
 ];

@@ -15,7 +15,7 @@ class StoreAppointmentRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:appointments,email'],
+            'email' => ['required', 'email', 'max:255'],
             'phone' => ['required', 'string', 'regex:/^(01[0125][0-9]{8}|\+201[0125][0-9]{8})$/'],
             'doctor_id' => ['nullable', 'exists:doctors,id'],
             'message' => ['nullable', 'string', 'max:5000'],

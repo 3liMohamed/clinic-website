@@ -159,10 +159,32 @@ return [
             ],
         ],
     ],
+    'appointment' => [
+        'route' => 'appointment',
+        'sections' => [
+            'appointment' => [
+                'component' => 'sections.appointment-page',
+                'requires_entity' => false,
+            ],
+            'subscription' => [
+                'component' => 'sections.subscription',
+                'requires_entity' => false,
+            ],
+        ],
+    ],
 
     'contact' => [
         'route' => 'contact',
-        'sections' => [],
+        'sections' => [
+            'subscription' => [
+                'component' => 'sections.subscription',
+                'requires_entity' => false,
+            ],
+            'contact' => [
+                'component' => 'sections.contact',
+                'requires_entity' => false,
+            ],
+        ],
     ],
 
 

@@ -307,7 +307,7 @@ body {
     position: absolute;
     content: "";
     left: 0;
-    bottom: 12px;
+    bottom: 0;
     height: 3px;
     width: 0%;
     background: #1a76d1;
@@ -3786,6 +3786,14 @@ body {
     margin-bottom: 50px;
 }
 
+.contact-us .contact-us-form .form-error {
+    display: block;
+    margin-top: 12px;
+    color: #dc3545;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
 .contact-us .form {
     margin-top: 30px;
 }
@@ -3903,6 +3911,10 @@ body {
 }
 
 .contact-us .single-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
     background: #1a76d1;
     padding: 40px 60px;
     height: 150px;
@@ -3971,6 +3983,20 @@ body {
     width: 100%;
 }
 
+.contact-us .mail-seccess {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    padding: 50px 40px;
+}
+.contact-us .mail-seccess h1 {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+.contact-us .mail-seccess h1 i {
+    font-size: 36px;
+}
 /*=========================
    End Contact Us CSS
 ===========================*/
@@ -4124,27 +4150,6 @@ body {
 
 /* Success */
 
-.newsletter .success-inner {
-    text-align: center;
-}
-
-.newsletter .success-content {
-    padding: 30px 15px;
-}
-
-.newsletter .success-content i {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    margin-bottom: 15px;
-    border-radius: 50%;
-    background: #f1f9f4;
-    color: #28a745;
-    font-size: 28px;
-}
-
 .newsletter .success-content h5 {
     margin-bottom: 8px;
     color: #2c2d3f;
@@ -4155,6 +4160,36 @@ body {
     margin: 0;
     color: #777;
 }
+
+
+.newsletter .success-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+.newsletter .success-inner h1 {
+    font-size: 100px;
+    text-shadow: 3px 5px 2px #3333;
+    color: #1a76d1;
+    font-weight: 700;
+}
+
+.newsletter .success-inner h1 span {
+    display: block;
+    font-size: 25px;
+    color: #333;
+    font-weight: 600;
+    text-shadow: none;
+    margin-top: 20px;
+}
+
+.newsletter .success-inner p {
+    padding: 20px 15px;
+}
+
 
 /*=========================
 	End Newsletter CSS
@@ -4640,6 +4675,8 @@ body {
 
 .footer .single-footer .social li a i {}
 
+
+
 .footer .single-footer.f-link li a i {
     margin-right: 10px;
 }
@@ -4706,6 +4743,9 @@ body {
 .footer .single-footer .time-sidual li span {
     display: inline-block;
     float: right;
+}
+.rtl .footer .single-footer .time-sidual li span {
+    float: left;
 }
 
 .footer .single-footer .day-head .time {

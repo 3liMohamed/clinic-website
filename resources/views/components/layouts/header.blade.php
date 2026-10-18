@@ -75,47 +75,7 @@
                                                 </li>
                                             @endif
                                         @endforeach
-                                        <li>
-                                            <a href="index.html#">Doctors <i class="icofont-rounded-down"></i></a>
-                                            <ul class="dropdown">
-                                                <li><a href="doctors.html">Doctor</a></li>
-                                                <li>
-                                                    <a href="doctor-details.html">Doctor Details</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <a href="index.html#">Services <i class="icofont-rounded-down"></i></a>
-                                            <ul class="dropdown">
-                                                <li><a href="service.html">Service</a></li>
-                                                <li>
-                                                    <a href="service-details.html">Service Details</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <a href="index.html#">Pages <i class="icofont-rounded-down"></i></a>
-                                            <ul class="dropdown">
-                                                <li><a href="about.html">About Us</a></li>
-                                                <li><a href="appointment.html">Appointment</a></li>
-                                                <li><a href="time-table.html">Time Table</a></li>
-                                                <li><a href="testimonials.html">Testimonials</a></li>
-                                                <li><a href="pricing.html">Our Pricing</a></li>
-                                                <li><a href="register.html">Sign Up</a></li>
-                                                <li><a href="login.html">Login</a></li>
-                                                <li><a href="faq.html">Faq</a></li>
-                                                <li><a href="mail-success.html">Mail Success</a></li>
-                                                <li><a href="404.html">404 Error</a></li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <a href="index.html#">Blogs <i class="icofont-rounded-down"></i></a>
-                                            <ul class="dropdown">
-                                                <li><a href="blog-grid.html">Blog Grid</a></li>
-                                                <li><a href="blog-single.html">Blog Details</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="contact.html">Contact Us</a></li>
+
                                     </ul>
                                 </nav>
                             </div>

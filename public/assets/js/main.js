@@ -324,24 +324,19 @@
             },
 
             success: function (response) {
-                form[0].reset();
-
                 const container = form.closest("[data-form-container]");
                 const content = container.find("[data-form-content]");
                 const success = container.find("[data-form-success]");
 
+                form[0].reset();
+                clearErrors(form);
+
                 content.hide();
-                success.removeAttr("hidden");
+                success.prop("hidden", false).show();
 
                 setTimeout(function () {
-                    success.attr("hidden", true);
+                    success.hide().prop("hidden", true);
                     content.show();
-
-                    clearErrors(form);
-
-                    form.find("[data-form-error]")
-                        .text("")
-                        .attr("hidden", true);
                 }, 5000);
 
             },

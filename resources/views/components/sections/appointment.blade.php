@@ -13,30 +13,32 @@
         </div>
         <div class="row" data-form-container>
             <div class="col-lg-6 col-md-12 col-12" data-form-content>
-                <form class="form" action="@route('appointments.store')" method="POST" data-form>
+                <form class="form" action="@route('appointment.store')" method="POST" data-form>
+                    @csrf
+                    <input type="text" name="website" tabindex="-1" autocomplete="off" class="d-none">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-12">
                             <div class="form-group">
-                                <input name="name" type="text" placeholder="Name" />
+                                <input name="name" type="text" placeholder="@t('forms', 'name')" required />
                                 <span class="form-error" data-error-for="name"></span>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-12">
                             <div class="form-group">
-                                <input name="email" type="email" placeholder="Email" />
+                                <input name="email" type="email" placeholder="@t('forms', 'email')" required />
                                 <span class="form-error" data-error-for="email"></span>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-12">
                             <div class="form-group">
-                                <input name="phone" type="text" placeholder="Phone" />
+                                <input name="phone" type="text" placeholder="@t('forms', 'phone')" required />
                                 <span class="form-error" data-error-for="phone"></span>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-12">
                             <div class="form-group">
                                 <select name="doctor_id" class="form-control wide">
-                                    <option value="">Doctor</option>
+                                    <option value="" selected>@t('forms', 'doctor')</option>
 
                                     @foreach ($doctors as $doctor)
                                         <option value="{{ $doctor->id }}">
@@ -51,7 +53,7 @@
 
                         <div class="col-lg-12 col-md-12 col-12">
                             <div class="form-group">
-                                <textarea name="message" placeholder="Write Your Message Here....."></textarea>
+                                <textarea name="message" placeholder="@t('forms', 'message')"></textarea>
                                 <span class="form-error" data-error-for="message"></span>
                             </div>
                         </div>
@@ -61,7 +63,7 @@
                             <div class="form-group">
                                 <div class="button">
                                     <button type="submit" class="btn">
-                                        Book An Appointment
+                                        @t('forms', 'appointment.send')
                                     </button>
                                 </div>
                             </div>
@@ -78,15 +80,10 @@
 
                     <h1>
                         <i class="icofont-send-mail"></i>
-                        <span>
-                            Your Mail Sent Successfully!
-                        </span>
+                        <span>@t('forms', 'appointment.success.title')</span>
                     </h1>
 
-                    <p>
-                        Your appointment request has been sent
-                        successfully. We will contact you shortly.
-                    </p>
+                    <p>@t('forms', 'appointment.success.description')</p>
 
                 </div>
             </div>

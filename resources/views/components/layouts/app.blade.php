@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" dir="{{ $getDir }}">
+<html lang="{{ app()->getLocale() }}" dir="{{ $getDir() }}">
 
 <head>
     <meta charset="utf-8">
@@ -68,7 +68,8 @@
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="@asset('assets/css/font-awesome.min.css')" />
     <!-- icofont CSS -->
-    <link rel="stylesheet" href="@asset('assets/css/icofont.css')" />
+    {{-- <link rel="stylesheet" href="@asset('assets/css/icofont.css')" /> --}}
+    <link rel="stylesheet" href="@asset('assets/css/icofont.min.css')" />
     <!-- Slicknav -->
     <link rel="stylesheet" href="@asset('assets/css/slicknav.min.css')" />
     <!-- Owl Carousel CSS -->
@@ -90,7 +91,7 @@
 
 </head>
 
-<body>
+<body class="{{ $getDir() }}">
 
 
     @include('layouts.loader')
@@ -99,7 +100,7 @@
 
     {{ $slot }}
 
-    @include('layouts.footer')
+    <x-layouts.footer />
 
 
 

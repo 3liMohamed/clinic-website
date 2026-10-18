@@ -20,7 +20,7 @@
                                             <a href="{{ $slide->primary_button_url }}" class="btn">{{ $slide->primary_button_text }}</a>
                                         @endif
                                         @if ($slide->secondary_button_url !== '#')
-                                            <a href="{{ $slide->secondary_button_url }}" class="btn primary">{{ $slide->secondary_button_url }}</a>
+                                            <a href="{{ $slide->secondary_button_url }}" class="btn primary">{{ $slide->secondary_button_text }}</a>
                                         @endif
                                     </div>
                                 </div>

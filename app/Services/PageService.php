@@ -29,7 +29,7 @@ class PageService extends BaseService
     public function allVisibleMain(): Collection
     {
         return $this->allVisible()
-            ->filter(fn(Page $page): bool => $page->isMainPage())
+            ->filter(fn (Page $page): bool => $page->isMainPage())
             ->values();
     }
 
@@ -39,7 +39,14 @@ class PageService extends BaseService
     public function allVisibleDetails(): Collection
     {
         return $this->allVisible()
-            ->filter(fn(Page $page): bool => $page->isDetailsPage())
+            ->filter(fn (Page $page): bool => $page->isDetailsPage())
+            ->values();
+    }
+
+    public function allVisibleFooter(): Collection
+    {
+        return $this->allVisible()
+            ->filter(fn (Page $page): bool => $page->isMainPage() && $page->show_in_footer)
             ->values();
     }
 
@@ -92,8 +99,7 @@ class PageService extends BaseService
     {
         return collect($page->sections ?? [])
             ->filter(
-                fn(array $section): bool =>
-                $page->isSectionVisible($section['name'])
+                fn (array $section): bool => $page->isSectionVisible($section['name'])
             )
             ->map(function (array $section) use ($page): ?array {
                 $config = config(

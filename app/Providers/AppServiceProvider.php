@@ -70,11 +70,15 @@ class AppServiceProvider extends ServiceProvider
         ]);
 
         RateLimiter::for('subscribe', function (Request $request) {
-            return Limit::perDay(1)->by($request->ip());
+            return Limit::perHour(5)->by($request->ip());
         });
 
-        RateLimiter::for('appointments', function (Request $request) {
-            return Limit::perDay(1)->by($request->ip());
+        RateLimiter::for('appointment', function (Request $request) {
+            return Limit::perHour(5)->by($request->ip());
+        });
+
+        RateLimiter::for('contact', function (Request $request) {
+            return Limit::perHour(5)->by($request->ip());
         });
     }
 

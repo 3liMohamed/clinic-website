@@ -28,7 +28,7 @@ class WhyChooseItem extends Model
 
 
     public array $translatable = [
-        'title',
+        'text',
     ];
 
     public function scopeOrdered(Builder $query): Builder

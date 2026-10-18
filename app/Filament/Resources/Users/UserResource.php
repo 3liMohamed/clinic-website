@@ -226,7 +226,10 @@ class UserResource extends Resource
                     ->fillForm(fn(User $record) => $record->permissions ?? [])
                     ->action(function (array $data, User $record, $livewire) {
                         app(UpdateUserPermissions::class)->handle($record, $data);
-                        $livewire->resetTable();
+                        if (auth()->id() === $record->id) {
+                            $livewire->dispatch('refresh-sidebar');
+                            $livewire->dispatch('refresh-topbar');
+                        }
                     })
                     ->extraAttributes(['class' => '!me-auto'])
                     ->label(__('system.action.permissions')),

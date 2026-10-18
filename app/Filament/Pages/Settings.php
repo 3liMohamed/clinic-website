@@ -30,6 +30,7 @@ use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
+use LaraZeus\FilamentLocationPickrField\Forms\Components\LocationPickr;
 
 class Settings extends Page
 {
@@ -74,6 +75,16 @@ class Settings extends Page
 
         $this->originalData = $settingService->getAll();
 
+        $location = $this->originalData['location'] ?? null;
+
+        if (is_string($location)) {
+            $location = json_decode($location, true);
+        }
+
+        if (is_array($location)) {
+            $this->originalData['location'] = $location;
+        }
+
         $workingDays = $this->originalData['working_days'] ?? null;
 
         if (is_string($workingDays)) {
@@ -81,7 +92,7 @@ class Settings extends Page
         }
 
         $this->originalData['working_days'] = $workingDays ?: collect(WorkingDay::cases())
-            ->map(fn (WorkingDay $day) => [
+            ->map(fn(WorkingDay $day) => [
                 'day' => $day->value,
                 'is_visible' => false,
                 'start_time' => null,
@@ -99,9 +110,16 @@ class Settings extends Page
 
         $data = $this->form->getState();
 
+
         foreach ($data as $key => $value) {
             if (($this->originalData[$key] ?? null) !== $value) {
-                $settingService->set($key, $value);
+                $settingService->set($key,
+                    $key === 'location'
+                        ? json_encode($value, JSON_THROW_ON_ERROR)
+                        : $value,
+                );
+
+                $this->originalData[$key] = $value;
             }
         }
 
@@ -118,8 +136,9 @@ class Settings extends Page
             ->components([
                 Section::make('settings')
                     ->heading(__('system.settings.title'))
-                    ->disabled(fn (): bool => ! $this->canEdit())
+                    ->disabled(fn(): bool => ! $this->canEdit())
                     ->schema([
+
                         TextInput::make('site:name')
                             ->required()
                             ->maxLength(99)
@@ -219,11 +238,11 @@ class Settings extends Page
                             ->columnSpan(3)
                             ->label(__('system.field.instagram')),
 
-                        TextInput::make('social:twitter')
+                        TextInput::make('social:x')
                             ->required()
                             ->rule(ValidOrHash::urlOrHash())
                             ->columnSpan(3)
-                            ->label(__('system.field.twitter')),
+                            ->label(__('system.field.x')),
 
                         TextInput::make('social:youtube')
                             ->required()
@@ -231,9 +250,11 @@ class Settings extends Page
                             ->columnSpan(3)
                             ->label(__('system.field.youtube')),
                     ])
+                    ->collapsible()
+                    ->collapsed()
                     ->columns(12)
                     ->columnSpanFull(),
-
+                $this->clinicLocation(),
                 $this->sectionWorkingDays(),
             ]);
     }
@@ -241,9 +262,9 @@ class Settings extends Page
     private function sectionWorkingDays(): Section
     {
         return Section::make('working-days')
-            ->disabled(fn (): bool => ! $this->canEdit())
-            ->heading(__('settings.working_days.title'))
-            ->description(__('settings.working_days.description'))
+            ->disabled(fn(): bool => ! $this->canEdit())
+            ->heading(__('system.settings.working_days.title'))
+            ->description(__('system.settings.working_days.description'))
             ->schema([
                 Repeater::make('working_days')
                     ->table([
@@ -267,8 +288,8 @@ class Settings extends Page
 
                         TextEntry::make('day_view')
                             ->statePath('day')
-                            ->formatStateUsing(fn ($state) => WorkingDay::from($state)->getLabel())
-                            ->color(fn ($state) => WorkingDay::from($state)->getColor())
+                            ->formatStateUsing(fn($state) => WorkingDay::from($state)->getLabel())
+                            ->color(fn($state) => WorkingDay::from($state)->getColor())
                             ->size(TextSize::Large)
                             ->alignment(Alignment::Center)
                             ->badge()
@@ -287,10 +308,10 @@ class Settings extends Page
                             ->seconds(false)
                             ->displayFormat('H:i')
                             ->live()
-                            ->required(fn (Get $get): bool => (bool) $get('is_visible'))
-                            ->disabled(fn (Get $get): bool => ! $get('is_visible'))
+                            ->required(fn(Get $get): bool => (bool) $get('is_visible'))
+                            ->disabled(fn(Get $get): bool => ! $get('is_visible'))
                             ->dehydrated()
-                            ->afterStateUpdated(fn (Set $set, Get $get) => $set('total', $this->calculateDuration($get('start_time'), $get('end_time'))))
+                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('total', $this->calculateDuration($get('start_time'), $get('end_time'))))
                             ->columnSpan(3)
                             ->label(__('system.field.start_time')),
 
@@ -298,10 +319,10 @@ class Settings extends Page
                             ->seconds(false)
                             ->displayFormat('H:i')
                             ->live()
-                            ->required(fn (Get $get): bool => (bool) $get('is_visible'))
-                            ->disabled(fn (Get $get): bool => ! $get('is_visible'))
+                            ->required(fn(Get $get): bool => (bool) $get('is_visible'))
+                            ->disabled(fn(Get $get): bool => ! $get('is_visible'))
                             ->dehydrated()
-                            ->afterStateUpdated(fn (Set $set, Get $get) => $set('total', $this->calculateDuration($get('start_time'), $get('end_time'))))
+                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('total', $this->calculateDuration($get('start_time'), $get('end_time'))))
                             ->columnSpan(3)
                             ->label(__('system.field.end_time')),
 
@@ -318,6 +339,8 @@ class Settings extends Page
                     ->columns(12)
                     ->columnSpanFull(),
             ])
+            ->collapsible()
+            ->collapsed()
             ->columns(12)
             ->columnSpanFull();
     }
@@ -341,5 +364,27 @@ class Settings extends Page
         $minutes = floor(($diff % 3600) / 60);
 
         return "{$hours}h {$minutes}m";
+    }
+
+    private function clinicLocation(): Section
+    {
+        return Section::make('location')
+            ->heading(__('system.settings.location.title'))
+            ->description(__('system.settings.location.description'))
+            ->disabled(fn(): bool => ! $this->canEdit())
+            ->schema([
+                LocationPickr::make('location')
+                    ->defaultLocation([30.0131, 31.2089])
+                    ->defaultZoom(13)
+                    ->draggable()
+                    ->clickable()
+                    ->height('400px')
+                    ->columnSpanFull()
+                    ->label(__('system.field.location')),
+            ])
+            ->collapsible()
+            ->collapsed()
+            ->columns(12)
+            ->columnSpanFull();
     }
 }

@@ -29,6 +29,7 @@ class Page extends Model
 
         'show_in_main_nav',
         'show_in_top_nav',
+        'show_in_footer',
         'is_cta',
 
         'meta_keywords',
@@ -52,6 +53,7 @@ class Page extends Model
             'order' => 'integer',
             'show_in_main_nav' => 'boolean',
             'show_in_top_nav' => 'boolean',
+            'show_in_footer' => 'boolean',
             'show_breadcrumb' => 'boolean',
             'is_cta' => 'boolean',
             'sections' => 'array',

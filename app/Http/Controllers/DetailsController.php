@@ -11,7 +11,7 @@ class DetailsController extends Controller
         private DetailResolver $detailResolver,
     ) {}
 
-    public function show(string $slug, string $type)
+    public function __invoke(string $slug, string $type)
     {
         $service = $this->detailResolver->resolve($type);
         $detail = $service->findBySlugOrFail($slug);

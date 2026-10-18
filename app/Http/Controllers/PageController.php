@@ -11,7 +11,7 @@ class PageController extends Controller
         private PageService $pageService
     ) {}
 
-    public function show(string $name): View
+    public function __invoke(string $name): View
     {
         $page = $this->pageService->findMainByNameOrFail($name);
 

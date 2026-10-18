@@ -6,7 +6,9 @@ use App\Enums\WorkingDay;
 use App\Filament\Actions\ToggleBoolean;
 use App\Filament\Actions\ToggleHome;
 use App\Filament\Forms\Components\IconSelect;
+use App\Filament\Resources\Appointments\AppointmentResource;
 use App\Filament\Resources\Doctors\Pages\ManageDoctors;
+use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Rules\ValidOrHash;
 use App\Services\DoctorService;
@@ -283,7 +285,7 @@ class DoctorResource extends Resource
                         fn(Doctor $record): bool =>
                         auth()->user()->can('workingHours', $record)
                     )
-                    ->icon('heroicon-o-clock')
+                    ->icon(Heroicon::OutlinedClock)
                     ->iconButton()
                     ->color('gray')
                     ->fillForm(
@@ -471,6 +473,22 @@ class DoctorResource extends Resource
                     ->method('toggleHome')
                     ->maxMethod('maxHome')
                     ->policyAbility('toggleHome'),
+
+                Action::make('appointments')
+                    ->iconButton()
+                    ->icon(Heroicon::OutlinedCalendarDays)
+                    ->authorize(fn (): bool => auth()->user()->can('viewAny', Appointment::class))
+                    ->visible(fn(Doctor $record): bool => $record->appointments()->exists())
+                    ->url(
+                        fn(Doctor $record): string =>
+                        AppointmentResource::getUrl('index', [
+                            'filters' => [
+                                'doctor_id' => [
+                                    'values' => [$record->getKey()],
+                                ],
+                            ],
+                        ])
+                    ),
 
                 ActionGroup::make([
                     ViewAction::make(),
